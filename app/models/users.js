@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class Users extends Model {
     static associate(models) {
       this.belongsTo(models.Cities, {
-        foreignKey: 'city_id',
+        foreignKey: 'cityId',
       });
       this.hasMany(models.Products, {
-        foreignKey: 'seller_id',
+        foreignKey: 'sellerId',
       });
-      this.hasMany(models.Transaction_History, {
-        foreignKey: 'buyer_id',
+      this.hasMany(models.TransactionHistory, {
+        foreignKey: 'buyerId',
       });
     }
   }
@@ -21,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     encryptedPassword: DataTypes.STRING,
     photo: DataTypes.STRING,
-    phone_number: DataTypes.STRING,
+    phoneNumber: DataTypes.STRING,
     address: DataTypes.STRING,
-    city_id: DataTypes.INTEGER
+    cityId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Users',

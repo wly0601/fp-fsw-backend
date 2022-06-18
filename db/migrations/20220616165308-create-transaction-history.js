@@ -1,14 +1,14 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Transaction_Histories', {
+    await queryInterface.createTable('TransactionHistories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      product_id: {
+      productId: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -17,7 +17,7 @@ module.exports = {
           key: "id",
         },
       },
-      buyer_id: {
+      buyerId: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -26,22 +26,22 @@ module.exports = {
           key: "id",
         },
       },
-      seller_id: {
+      sellerId: {
         type: Sequelize.INTEGER,
       },
-      integer_price: {
+      initialPrice: {
         type: Sequelize.INTEGER
       },
-      bargain_price: {
+      bargainPrice: {
         type: Sequelize.INTEGER
       },
-      date_of_bargain: {
+      dateOfBargain: {
         type: Sequelize.DATE
       },
-      acc_by_seller: {
+      accBySeller: {
         type: Sequelize.BOOLEAN
       },
-      date_of_acc_or_not: {
+      dateOfAccOrNot: {
         type: Sequelize.DATE
       },
       createdAt: {
@@ -55,6 +55,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Transaction_Histories');
+    await queryInterface.dropTable('TransactionHistories');
   }
 };

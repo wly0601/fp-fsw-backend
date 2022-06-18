@@ -73,9 +73,7 @@ module.exports = {
         id: user.id,
         name: user.name,
         email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }, process.env.JWT_PRIVATE_KEY || 'apahayo', {
+      }, process.env.JWT_PRIVATE_KEY || 'Token', {
         expiresIn: '1h'
       });
 
