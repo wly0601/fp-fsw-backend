@@ -5,26 +5,26 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Products extends Model {
     static associate(models) {
-      this.hasMany(models.Transaction_History, {
-        foreignKey: "product_id",
+      this.hasMany(models.TransactionHistory, {
+        foreignKey: "productId",
       });
       this.belongsTo(models.Categories, {
-        foreignKey: "category_id",
+        foreignKey: "categoryId",
       });
       this.belongsTo(models.Users, {
-        foreignKey: "seller_id",
+        foreignKey: "sellerId",
       });
     }
   }
   Products.init({
     name: DataTypes.STRING,
-    seller_id: DataTypes.INTEGER,
+    sellerId: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
-    category_id: DataTypes.INTEGER,
+    categoryId: DataTypes.INTEGER,
     description: DataTypes.STRING(1000),
     images: DataTypes.ARRAY(DataTypes.STRING),
     status: DataTypes.STRING,
-    number_of_whislist: DataTypes.INTEGER
+    numberOfWhislist: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Products',

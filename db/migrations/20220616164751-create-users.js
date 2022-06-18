@@ -20,13 +20,13 @@ module.exports = {
       photo: {
         type: Sequelize.STRING
       },
-      phone_number: {
+      phoneNumber: {
         type: Sequelize.STRING
       },
       address: {
         type: Sequelize.STRING
       },
-      city_id: {
+      cityId: {
         type: Sequelize.INTEGER,
         references: {
           model: {

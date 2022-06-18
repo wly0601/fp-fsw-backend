@@ -11,7 +11,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      seller_id: {
+      sellerId: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -23,7 +23,7 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
-      category_id: {
+      categoryId: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -41,7 +41,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING
       },
-      number_of_whislist: {
+      numberOfWhislist: {
         type: Sequelize.INTEGER
       },
       createdAt: {
