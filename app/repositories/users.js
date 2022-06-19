@@ -1,39 +1,39 @@
 const { Users } = require("../models");
 
 module.exports = {
-    create(inputData) {
-        return Users.create(inputData);
-    },
+	create(inputData) {
+		return Users.create(inputData);
+	},
 
-    update(id, updatedData) {
-        return Users.update(updatedData, {
-            where: {
-                id,
-            },
-        });
-    },
+	update(id, updatedData) {
+		return Users.update(updatedData, {
+			where: {
+				id,
+			},
+		});
+	},
 
-    delete(id) {
-        return Users.destroy({
-            where: {
-                id
-            }
-        });
-    },
+	delete(id) {
+		return Users.destroy({
+			where: {
+				id
+			}
+		});
+	},
 
-    find(id) {
-        return Users.findByPk(id);
-    },
+	find(id) {
+		return Users.findByPk(id);
+	},
 
-    findAll() {
-        return Users.findAll();
-    },
+	findAll() {
+		return Users.findAll();
+	},
 
-    findOne(key) {
-        return Users.findOne(key);
-    },
+	findOne(key) {
+		return Users.findOne(key);
+	},
 
-    getTotalUsers() {
-        return Users.count();
-    },
+	getTotalUsers() {
+		return Users.count();
+	},
 };
