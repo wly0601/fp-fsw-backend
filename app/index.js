@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(router)
 
 app.put(
-    "/api/v1/profiles/:id/picture/cloudinary",
+    "/api/profiles/:id/picture/cloudinary",
     uploadOnMemory.single("picture"),
     (req, res) => {
       const fileBase64 = req.file.buffer.toString("base64");
