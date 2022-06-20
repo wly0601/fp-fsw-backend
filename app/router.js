@@ -26,10 +26,11 @@ apiRouter.get("/api/users",
 	controllers.api.authentication.getAllUsers,	
 )
 
-apiRouter.get("/api/users/:id",
+apiRouter.put("/api/users/:id/detail",
 	controllers.api.authentication.authorize, 
-	controllers.api.authentication.getUser,	
+	controllers.api.authentication.updateDetail,	
 )
+
 
 
 module.exports = apiRouter;
