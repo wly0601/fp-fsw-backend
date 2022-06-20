@@ -7,89 +7,147 @@ async function checkPassword(password, encryptedPassword) {
 }
 
 function createToken(payload) {
-  return jwt.sign(payload, process.env.JWT_SIGNATURE_KEY || "Token");
+  return jwt.sign(payload, process.env.JWT_PRIVATE_KEY || "Token");
 }
 
 module.exports = {
-  async register(req, res, next) {
-    try {
-      const {
-        name,
-        email,
-        password
-      } = req.body
-      const encryptedPassword = await bcrypt.hash(password, 10)
-      const user = await userServices.create({
-        email: email.toLowerCase(),
-        name,
-        encryptedPassword
-      });
-      res.status(201).json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      });
-      next();
-    } catch (err) {
-      res.status(401).json({
-        status: "Failed",
-        message: err.message
-      });
-    }
+  async authorize(req, res, next){
+		try {
+	  	if (!req.headers.authorization) {
+				res.status(401).json({
+		  		status:"Failed",
+		  		message:"Insert Token!"
+				});
+				return
+	  	}
+
+	  	const token = req.headers.authorization.split("Bearer ")[1];
+	  	const tokenPayload = jwt.verify(
+				token,
+				process.env.JWT_PRIVATE_KEY || "Token"
+	  	);
+
+	  	req.user = await userServices.get(tokenPayload.id);
+
+	  	next();
+		} catch (err) {
+	  	res.status(401).json({
+				error: err.message,
+				message: "Unauthorized."
+	  	});
+		}
+  },
+
+  async register(req, res) {
+		try {
+			const password = req.body.password
+	  	const encryptedPassword = await bcrypt.hash(password, 10)
+
+	  	const user = await userServices.create({
+				name: req.body.name,
+				email: req.body.email.toLowerCase(),
+				encryptedPassword,
+	  	});
+
+	  	res.status(201).json({
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
+	  	});
+		} catch (err) {
+	  	res.status(400).json({
+				status: "Failed",
+				message: err.message
+	  	});
+		}
   },
 
   async login(req, res) {
-    try {
-      const email = req.body.email.toLowerCase();
-      const password = req.body.password;
+		try {
+	  	const email = req.body.email.toLowerCase();
+	  	const password = req.body.password;
 
-      const user = await userServices.getOne({
-        where: {
-          email
-        },
-      });
+	  	const user = await userServices.getOne({
+				where: {
+		 	 		email
+				},		
+	  	});
 
-      if (!user) {
-        res.status(404).json({
-          status:"Failed",
-          message:"Email not found!"
-        });
-        return
-      }
+	  	if (!user) {
+				res.status(404).json({
+		 			status:"Failed",
+		  		message:"Email not found!"
+				});
+				return
+	  	}
 
-      const isPasswordCorrect = await bcrypt.compareSync(password, user.encryptedPassword)
+	  	const isPasswordCorrect = await checkPassword(password, user.encryptedPassword)
 
-      if (!isPasswordCorrect) {
-        res.status(401).json({
-          status:"Failed",
-          message: "Password is incorrect!"
-        });
-        return;
-      }
+	  	if (!isPasswordCorrect) {
+				res.status(401).json({
+		  		status:"Failed",
+		  		message: "Password is incorrect!"
+				});
+				return;
+	  	}
 
-      const token = createToken({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      }, process.env.JWT_PRIVATE_KEY || 'Token', {
-        expiresIn: '1h'
-      });
+	  	const token = createToken({
+				id: user.id,
+				name: user.name,
+				email: user.email,
+	  	}, process.env.JWT_PRIVATE_KEY || 'Token', {
+				expiresIn: '1h'
+	  	});
 
-      res.status(201).json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        token,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      });
-    } catch (err) {
-      res.status(401).json({
-        status: "Failed",
-        message: err.message
-      });
-    }
+	  	res.status(201).json({
+				id: user.id,
+				name: user.name,
+				email: user.email,
+				token,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
+	  	});
+		} catch (err) {
+	  	res.status(401).json({
+				status: "Failed",
+				message: err.message
+	  	});
+		}
+  },
+  
+  async whoAmI(req, res){
+  	res.status(200).json(req.user);
+  },
+
+  async getUser(req, res){
+		const user = await userServices.get(req.params.id)
+
+		if (!user) {
+	  	res.status(404).json({
+				status: "FAIL",
+				message: `User with id ${req.params.id} not found!`,
+	  	});
+	  	return
+		}
+
+		res.status(200).json(user);
+  },
+
+  async getAllUsers(req, res){
+		try {
+	  	const getAll = await userServices.list();
+
+			res.status(200).json({
+				status: "success",
+				data: getAll
+			})
+		} catch (err) {
+			res.status(400).json({
+				status: "FAIL",
+				message: err.message
+			})
+		}
   },
 };
