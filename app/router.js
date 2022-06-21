@@ -5,7 +5,7 @@ const middlewares = require("./middlewares");
 const apiRouter = express.Router();
 
 /**
- * Authentication Resource 
+ * Authentication Resources 
  */
 apiRouter.post("/api/login", 
 	controllers.api.authentication.login
@@ -29,6 +29,26 @@ apiRouter.get("/api/users",
 apiRouter.put("/api/users/:id/detail",
 	controllers.api.authentication.authorize, 
 	controllers.api.authentication.updateDetail,	
+)
+
+
+/**
+ * Product Resources
+ */
+
+apiRouter.post("/api/products",
+	controllers.api.authentication.authorize, 
+	controllers.api.product.createProduct,
+)
+
+apiRouter.put("/api/product/:id",
+	controllers.api.authentication.authorize, 
+	controllers.api.product.updateProduct,
+)
+
+apiRouter.delete("/api/product/:id",
+	controllers.api.authentication.authorize, 
+	controllers.api.product.deleteProduct,
 )
 
 
