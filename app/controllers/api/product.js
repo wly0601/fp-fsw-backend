@@ -14,7 +14,7 @@ module.exports = {
 			if(typeof price !== 'number'){
 				res.status(400).json({
 					status: "FAIL",
-					message: "Price must be an float!"
+					message: "Price must be float!"
 				})
 				return
 			}
