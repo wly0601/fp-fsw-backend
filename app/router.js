@@ -8,6 +8,10 @@ const apiRouter = express.Router();
 const swaggerUI = require('swagger-ui-express');
 const swaggerDocument = require('../config/swagger.json');
 
+
+apiRouter.get("/", controllers.api.application.getRoot);
+
+
 /**
  * Authentication Resources 
  */
@@ -59,7 +63,7 @@ apiRouter.delete("/api/product/:id",
  * API Documentation
  */
 
- apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
- apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
+apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 module.exports = apiRouter;
