@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config bin/www",
-    "dev": "nodemon -r dotenv/config bin/www"
+    "start": "node bin/www",
+    "dev": "nodemon -q bin/www"
   },
   "author": "FadliDeviAulia",
   "license": "ISC",
