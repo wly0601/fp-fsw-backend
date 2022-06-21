@@ -4,6 +4,10 @@ const middlewares = require("./middlewares");
 
 const apiRouter = express.Router();
 
+// configure and initialization swagger
+const swaggerUI = require('swagger-ui-express');
+const swaggerDocument = require('../config/swagger.json');
+
 /**
  * Authentication Resources 
  */
@@ -51,6 +55,11 @@ apiRouter.delete("/api/product/:id",
 	controllers.api.product.deleteProduct,
 )
 
+/**
+ * API Documentation
+ */
 
+ apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
+ apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 module.exports = apiRouter;
