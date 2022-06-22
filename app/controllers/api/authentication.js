@@ -154,10 +154,18 @@ module.exports = {
 	},
 
 	async whoAmI(req, res) {
-		res.status(200).json(req.user);
+		try {
+			res.status(200).json(req.user);
+		} catch (err) {
+			res.status(401).json({
+				status: "FAIL",
+				message: err.message,
+			});
+		}
 	},
 
 	async getUser(req, res) {
+    try{
 		const user = await userServices.get(req.params.id)
 
 		if (!user) {
@@ -169,6 +177,12 @@ module.exports = {
 		}
 
 		res.status(200).json(user);
+  } catch (err){
+    res.status(401).json({
+      status: "FAIL",
+      message: err.message,
+    });
+  }
 	},
 
 	async getAllUsers(req, res) {
