@@ -9,7 +9,11 @@ const { MORGAN_FORMAT } = require("../config/application")
 const app = express();
 console.clear();
 
-app.use(morgan(MORGAN_FORMAT));
+const nodeEnv = process.env.NODE_ENV;
+if(!nodeEnv || nodeEnv === "production"){
+  app.use(morgan(MORGAN_FORMAT));
+}
+
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());

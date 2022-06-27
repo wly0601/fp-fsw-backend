@@ -110,6 +110,7 @@ module.exports = {
 	},
 
 	async deleteProduct(req, res){
+		try{
 		const id = req.params.id;
 		const product = await productServices.getOne({
 			where: {
@@ -140,6 +141,14 @@ module.exports = {
 			status: "OK",
 			message: `Product with id ${req.params.id} has been deleted.`,    	
 		});
+	} catch(err) {
+		res.status(400).json({
+			error: {
+				name: err.name,
+				message: err.message,
+			}
+		});
+	}
 	},
 
 };
