@@ -47,6 +47,10 @@ module.exports = {
 				name: req.body.name,
 				email: req.body.email.toLowerCase(),
 				encryptedPassword,
+				photo: null,
+    		phoneNumber: null,
+    		address: null,
+    		cityId: null,
 			});
 
 			res.status(201).json({
