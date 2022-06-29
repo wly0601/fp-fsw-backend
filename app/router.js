@@ -59,6 +59,16 @@ apiRouter.put("/api/product/:id",
 	controllers.api.product.updateProduct,
 )
 
+apiRouter.get("/api/product/:id",
+	controllers.api.authentication.authorize,
+	controllers.api.product.getProduct,
+)
+
+apiRouter.get("/api/products",
+	controllers.api.authentication.authorize,
+	controllers.api.product.getAllProducts,
+)
+
 apiRouter.delete("/api/product/:id",
 	controllers.api.authentication.authorize,
 	controllers.api.product.deleteProduct,

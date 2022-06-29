@@ -9,11 +9,15 @@
       "email": "secondhand@gmail.com"
     }
   },
-  "tags": [{
+  "tags": [
+    {
       "name": "Auth"
     },
     {
       "name": "Products"
+    },
+    {
+      "name": "Upload"
     }
   ],
   "consumes": [
@@ -42,14 +46,16 @@
             }
           }
         },
-        "parameters": [{
-          "name": "body",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/coreLoginRequest"
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/coreLoginRequest"
+            }
           }
-        }],
+        ],
         "tags": [
           "Auth"
         ]
@@ -74,14 +80,16 @@
             }
           }
         },
-        "parameters": [{
-          "name": "body",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/coreRegisterRequest"
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/coreRegisterRequest"
+            }
           }
-        }],
+        ],
         "tags": [
           "Auth"
         ]
@@ -92,9 +100,7 @@
         "summary": "Who Am I",
         "description": "Retrieve current user info",
         "operationId": "whoami",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
+        "security": [ { "BearerTokenAuth": [] } ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -114,41 +120,137 @@
         ]
       }
     },
-    "/api/users": {
-      "get": {
-        "summary": "Get All User",
-        "description": "Can Get User, But Can not Edit and Delete",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
-        "responses": {
-          "200": {
-            "description": "Berhasil ditampilkan",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/definitions/coreUser"
-                }
+    "/api/users/{id}/detail":{
+    "put": {
+      "summary": "Update User",
+      "description": "Change user information",
+      "operationId": "updateUser",
+      "security": [ { "BearerTokenAuth": [] } ],
+      "responses": {
+        "200": {
+          "description": "A successful response.",
+          "schema": {
+            "$ref": "#/definitions/coreUser"
+          }
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "photo": {
+                "type": "string"
+              },
+              "phoneNumber": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "cityId": {
+                "type": "integer"
               }
             }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      ],
+      "tags": [
+        "Auth"
+      ]
+    }
+  },
+  "/api/users": {
+    "get": {
+      "summary": "Get All User",
+      "description": "Can Get User, But Can not Edit and Delete",
+      "security": [{
+        "BearerTokenAuth": []
+      }],
+      "responses": {
+        "200": {
+          "description": "Berhasil ditampilkan",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/coreUser"
+              }
             }
           }
         },
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/api/users/{id}/detail": {
-      "put": {
-        "summary": "Update User",
-        "description": "Change user information",
-        "operationId": "updateUser",
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "tags": [
+        "Auth"
+      ]
+    }
+  },
+  "/api/profiles/{id}/picture/cloudinary": {
+    "put": {
+      "summary": "Upload",
+      "description": "Upload Photo/Image in Cloudinary",
+      "operationId": "uploadOnMemory",
+      "responses": {
+        "200": {
+          "description": "A successful response.",
+          "schema": {
+            "picture" : {
+              "type":"string"
+            }
+          }
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "type": "integer",
+        "format": "int64"
+      },
+      {
+      "name": "picture",
+      "in": "formData",
+      "required": true,
+      "type": "file"
+    }],
+    "tags": [
+      "Upload"
+    ]
+  }
+  },
+    "/api/products": {
+      "get": {
+        "summary": "List Products",
+        "description": "Retrieve list of products",
+        "operationId": "listProducts",
         "security": [{
           "BearerTokenAuth": []
         }],
@@ -156,7 +258,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/coreUser"
+              "$ref": "#/definitions/coreListProductResponse"
             }
           },
           "default": {
@@ -166,49 +268,15 @@
             }
           }
         },
-        "parameters": [{
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "photo": {
-                  "type": "string"
-                },
-                "phoneNumber": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "cityId": {
-                  "type": "integer"
-                }
-              }
-            }
-          }
-        ],
         "tags": [
-          "Auth"
+          "Products"
         ]
-      }
-    },
-    "/api/products": {
+      },
       "post": {
         "summary": "Create Product",
         "description": "Add new product on the database",
         "operationId": "createProducts",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
+        "security": [ { "BearerTokenAuth": [] } ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -223,14 +291,16 @@
             }
           }
         },
-        "parameters": [{
-          "name": "body",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/coreCreateProductRequest"
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/coreCreateProductRequest"
+            }
           }
-        }],
+        ],
         "tags": [
           "Products"
         ]
@@ -241,6 +311,7 @@
         "summary": "Get Product",
         "description": "Retrieve product detail",
         "operationId": "getProduct",
+        "security": [ { "BearerTokenAuth": [] } ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -255,13 +326,47 @@
             }
           }
         },
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "integer",
-          "format": "int64"
-        }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Products"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Product",
+        "description": "Remove existing product by id",
+        "operationId": "deleteProduct",
+        "security": [ { "BearerTokenAuth": [] } ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
         "tags": [
           "Products"
         ]
@@ -270,9 +375,7 @@
         "summary": "Update Product",
         "description": "Change product information",
         "operationId": "updateProduct",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
+        "security": [ { "BearerTokenAuth": [] } ],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -287,7 +390,8 @@
             }
           }
         },
-        "parameters": [{
+        "parameters": [
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -305,8 +409,7 @@
                   "type": "string"
                 },
                 "price": {
-                  "type": "integer",
-                  "format": "int64"
+                  "type": "integer"
                 },
                 "categoryId": {
                   "type": "integer"
@@ -324,38 +427,6 @@
             }
           }
         ],
-        "tags": [
-          "Products"
-        ]
-      },
-      "delete": {
-        "summary": "Delete Product",
-        "description": "Remove existing product by id",
-        "operationId": "deleteProduct",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "integer",
-          "format": "int64"
-        }],
         "tags": [
           "Products"
         ]
@@ -408,17 +479,17 @@
         "encryptedPassword": {
           "type": "string"
         },
-        "photo": {
+        "photo":{
           "type": "string"
         },
         "phoneNumber": {
-          "type": "string"
+          "type":"string"
         },
         "address": {
-          "type": "string"
+          "type":"string"
         },
         "cityId": {
-          "type": "integer"
+          "type":"integer"
         },
         "createdAt": {
           "type": "string",
@@ -484,6 +555,20 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "coreListProductsResponse": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/ListProductsResponseMetaListProducts"
+        },
+        "cars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coreProduct"
           }
         }
       }
@@ -578,17 +663,17 @@
         "encryptedPassword": {
           "type": "string"
         },
-        "photo": {
+        "photo":{
           "type": "string"
         },
         "phoneNumber": {
-          "type": "string"
+          "type":"string"
         },
         "address": {
-          "type": "string"
+          "type":"string"
         },
         "cityId": {
-          "type": "integer"
+          "type":"integer"
         },
         "createdAt": {
           "type": "string",

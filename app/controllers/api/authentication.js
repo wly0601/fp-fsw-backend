@@ -47,6 +47,10 @@ module.exports = {
 				name: req.body.name,
 				email: req.body.email.toLowerCase(),
 				encryptedPassword,
+				photo: null,
+				phoneNumber:null,
+				address: null,
+				cityId: null
 			});
 
 			res.status(201).json({
@@ -165,24 +169,24 @@ module.exports = {
 	},
 
 	async getUser(req, res) {
-    try{
-		const user = await userServices.get(req.params.id)
+		try {
+			const user = await userServices.get(req.params.id)
 
-		if (!user) {
-			res.status(404).json({
+			if (!user) {
+				res.status(404).json({
+					status: "FAIL",
+					message: `User with id ${req.params.id} not found!`,
+				});
+				return
+			}
+
+			res.status(200).json(user);
+		} catch (err) {
+			res.status(401).json({
 				status: "FAIL",
-				message: `User with id ${req.params.id} not found!`,
+				message: err.message,
 			});
-			return
 		}
-
-		res.status(200).json(user);
-  } catch (err){
-    res.status(401).json({
-      status: "FAIL",
-      message: err.message,
-    });
-  }
 	},
 
 	async getAllUsers(req, res) {
