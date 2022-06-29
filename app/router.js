@@ -75,6 +75,20 @@ apiRouter.delete("/api/product/:id",
 )
 
 /**
+ * City Resources
+ */
+
+ apiRouter.get("/api/city/:id",
+ controllers.api.authentication.authorize,
+ controllers.api.cities.getCity,
+)
+
+apiRouter.get("/api/cities",
+	controllers.api.authentication.authorize,
+	controllers.api.cities.getAllCities,
+)
+
+/**
  * API Documentation
  */
 

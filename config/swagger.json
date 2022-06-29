@@ -18,6 +18,9 @@
     },
     {
       "name": "Upload"
+    },
+    {
+      "name": "City"
     }
   ],
   "consumes": [
@@ -245,6 +248,67 @@
     ]
   }
   },
+  "/api/city/{id}": {
+    "get": {
+      "summary": "Get City",
+      "description": "Retrieve city by id",
+      "operationId": "getCity",
+      "security": [ { "BearerTokenAuth": [] } ],
+      "responses": {
+        "200": {
+          "description": "A successful response."
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }
+      ],
+      "tags": [
+        "City"
+      ]
+    }
+  },
+  "/api/cities": {
+    "get": {
+      "summary": "Get Cities",
+      "description": "Can Get Cities, But Can not Edit and Delete",
+      "security": [{
+        "BearerTokenAuth": []
+      }],
+      "responses": {
+        "200": {
+          "description": "Berhasil ditampilkan",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/coreCity"
+              }
+            }
+          }
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "tags": [
+        "City"
+      ]
+    }
+  },
     "/api/products": {
       "get": {
         "summary": "List Products",
@@ -257,7 +321,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/coreListProductResponse"
+              "$ref": "#/definitions/coreProduct"
             }
           },
           "default": {
@@ -692,6 +756,17 @@
         "updatedAt": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "coreCity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name":{
+          "type": "string"
         }
       }
     },
