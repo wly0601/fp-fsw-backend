@@ -206,19 +206,18 @@
       ]
     }
   },
-  "/api/profiles/{id}/picture/cloudinary": {
+  "/api/user/picture/{id}/cloudinary": {
     "put": {
       "summary": "Upload",
       "description": "Upload Photo/Image in Cloudinary",
       "operationId": "uploadOnMemory",
+      "security": [ { "BearerTokenAuth": [] } ],
       "responses": {
-        "200": {
+        "201": {
           "description": "A successful response.",
           "schema": {
-            "picture" : {
-              "type":"string"
-            }
-          }
+            "$ref": "#/definitions/responseUpload"
+         }
         },
         "default": {
           "description": "An unexpected error response.",
@@ -570,6 +569,17 @@
           "items": {
             "$ref": "#/definitions/coreProduct"
           }
+        }
+      }
+    },
+    "responseUpload": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
         }
       }
     },

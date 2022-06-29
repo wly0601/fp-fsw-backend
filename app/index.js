@@ -5,6 +5,7 @@ const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan");
 const router = require("./router");
+const controllers = require("./controllers");
 const { MORGAN_FORMAT } = require("../config/application")
 const app = express();
 console.clear();
@@ -20,7 +21,8 @@ app.use(express.json());
 app.use(router)
 
 app.put(
-    "/api/profiles/:id/picture/cloudinary",
+    "/api/user/picture/:id/cloudinary",
+    controllers.api.authentication.authorize,
     uploadOnMemory.single("picture"),
     (req, res) => {
       const fileBase64 = req.file.buffer.toString("base64");
