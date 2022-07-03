@@ -27,8 +27,7 @@ const categories = [
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const category = categories.map((cat, index) => ({
-      id: index+1,
+    const category = categories.map((cat) => ({
       name: cat,
       createdAt: new Date(),
       updatedAt: new Date(),      

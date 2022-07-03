@@ -41,16 +41,13 @@ module.exports = {
 	async register(req, res) {
 		try {
 			const password = req.body.password
-			const encryptedPassword = await bcrypt.hash(password, 10)
+			const encryptedPassword = await bcrypt.hash(password, 5)
 
 			const user = await userServices.create({
 				name: req.body.name,
 				email: req.body.email.toLowerCase(),
 				encryptedPassword,
-				photo: null,
-				phoneNumber:null,
-				address: null,
-				cityId: null
+
 			});
 
 			res.status(201).json({

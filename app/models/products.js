@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         foreignKey: "sellerId",
       });
+      this.belongsTo(models.Status, {
+        foreignKey: "statusId",
+      });
     }
   }
   Products.init({
@@ -23,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     categoryId: DataTypes.INTEGER,
     description: DataTypes.STRING(1000),
     images: DataTypes.ARRAY(DataTypes.STRING),
-    status: DataTypes.STRING,
+    statusId: DataTypes.INTEGER,
     numberOfWhislist: DataTypes.INTEGER
   }, {
     sequelize,
