@@ -59,9 +59,33 @@ apiRouter.put("/api/product/:id",
 	controllers.api.product.updateProduct,
 )
 
+apiRouter.get("/api/product/:id",
+	controllers.api.authentication.authorize,
+	controllers.api.product.getProduct,
+)
+
+apiRouter.get("/api/products",
+	controllers.api.authentication.authorize,
+	controllers.api.product.getAllProducts,
+)
+
 apiRouter.delete("/api/product/:id",
 	controllers.api.authentication.authorize,
 	controllers.api.product.deleteProduct,
+)
+
+/**
+ * City Resources
+ */
+
+ apiRouter.get("/api/city/:id",
+ controllers.api.authentication.authorize,
+ controllers.api.cities.getCity,
+)
+
+apiRouter.get("/api/cities",
+	controllers.api.authentication.authorize,
+	controllers.api.cities.getAllCities,
 )
 
 /**

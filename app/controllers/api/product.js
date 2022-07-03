@@ -109,6 +109,45 @@ module.exports = {
 		}		
 	},
 
+	async getProduct(req, res) {
+		try{
+		const product = await productServices.get(req.params.id)
+
+		if (!product) {
+			res.status(404).json({
+				status: "FAIL",
+				message: `Product with id ${req.params.id} not found!`,
+			});
+			return
+		}
+
+		res.status(200).json(product);
+	} catch(err){
+		res.status(400).json({
+			error: {
+				name: err.name,
+				message: err.message,
+			}
+		});
+	}
+	},
+
+	async getAllProducts(req, res) {
+		try {
+			const getAll = await productServices.list();
+
+			res.status(200).json({
+				status: "success",
+				data: getAll
+			})
+		} catch (err) {
+			res.status(400).json({
+				status: "FAIL",
+				message: err.message
+			})
+		}
+	},
+
 	async deleteProduct(req, res){
 		try{
 		const id = req.params.id;

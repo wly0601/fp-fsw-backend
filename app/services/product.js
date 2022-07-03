@@ -16,7 +16,7 @@ module.exports = {
 	async list() {
 		try {
 			const products = await productRepository.findAll();
-			const productCount = await productRepository.getTotalUsers();
+			const productCount = await productRepository.getTotalProducts();
 
 			return {
 					data: products,
