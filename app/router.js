@@ -89,6 +89,20 @@ apiRouter.get("/api/cities",
 )
 
 /**
+ * Category Resources
+ */
+
+ apiRouter.get("/api/category/:id",
+ controllers.api.authentication.authorize,
+ controllers.api.category.getCategory,
+)
+
+apiRouter.get("/api/categories",
+	controllers.api.authentication.authorize,
+	controllers.api.category.getAllCategories,
+)
+
+/**
  * API Documentation
  */
 
