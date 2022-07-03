@@ -21,6 +21,9 @@
     },
     {
       "name": "City"
+    },
+    {
+      "name":"Category"
     }
   ],
   "consumes": [
@@ -306,6 +309,75 @@
       },
       "tags": [
         "City"
+      ]
+    }
+  },
+  "/api/category/{id}": {
+    "get": {
+      "summary": "Get Category by Id",
+      "description": "Can Get Category, But Can not Edit and Delete",
+      "security": [{
+        "BearerTokenAuth": []
+      }],
+      "responses": {
+        "200": {
+          "description": "Berhasil ditampilkan",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/coreCity"
+              }
+            }
+          }
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }
+      ],      
+      "tags": [
+        "Category"
+      ]
+    }
+  },
+  "/api/categories": {
+    "get": {
+      "summary": "Get All Categories",
+      "description": "Can Get Cities, But Can not Edit and Delete",
+      "security": [{
+        "BearerTokenAuth": []
+      }],
+      "responses": {
+        "200": {
+          "description": "Berhasil ditampilkan",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/coreCity"
+              }
+            }
+          }
+        },
+        "default": {
+          "description": "An unexpected error response.",
+          "schema": {
+            "$ref": "#/definitions/rpcStatus"
+          }
+        }
+      },
+      "tags": [
+        "Category"
       ]
     }
   },
