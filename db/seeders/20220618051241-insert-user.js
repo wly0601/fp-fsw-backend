@@ -72,7 +72,7 @@ module.exports = {
     const password = "12345678";
     const encryptedPassword = bcrypt.hashSync(password, 10);
     
-    const users = names.map((name, index) => {
+    const users = names.map((name) => {
       const splitName = name.split(' ');
       var emailBuild = splitName[0] + splitName[splitName.length - 1];
       const randAlpha = getRandAlphabet();
@@ -80,7 +80,6 @@ module.exports = {
       const randCity = getRandCity();
 
       return ({
-        id: index+1,
         name,
         email: `${emailBuild.toLowerCase()}@gmail.com`,
         encryptedPassword,

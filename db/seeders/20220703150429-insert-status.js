@@ -5,8 +5,7 @@ module.exports = {
 
     const status = ['For Sale','Currently Bargained','Sold']
 
-    const insertStatus = status.map((stat, index) => ({
-      id: index+1,
+    const insertStatus = status.map((stat) => ({
       name: stat,
       createdAt: new Date(),
       updatedAt: new Date(),      

@@ -3,8 +3,7 @@ const indonesiaCities = require("../../data/indonesia-cities.json")
 
 module.exports = {
   async up(queryInterface, Sequelize){
-    const cities = indonesiaCities.map((city, index) => ({
-      id: index+1,
+    const cities = indonesiaCities.map((city) => ({
       name: city.city, 
       createdAt: new Date(),
       updatedAt: new Date(),      
