@@ -26,12 +26,6 @@ module.exports = {
           key: "id",
         },
       },
-      sellerId: {
-        type: Sequelize.INTEGER,
-      },
-      initialPrice: {
-        type: Sequelize.INTEGER
-      },
       bargainPrice: {
         type: Sequelize.INTEGER
       },

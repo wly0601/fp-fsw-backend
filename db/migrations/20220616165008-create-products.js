@@ -38,8 +38,14 @@ module.exports = {
       images: {
         type: Sequelize.ARRAY(Sequelize.STRING)
       },
-      status: {
-        type: Sequelize.STRING
+      statusId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: "Status",
+          },
+          key: "id",
+        },
       },
       numberOfWhislist: {
         type: Sequelize.INTEGER
