@@ -121,6 +121,7 @@ module.exports = {
 	async updateDetail(req, res) {
 		try {
 			const {
+				name,
 				photo,
 				phoneNumber,
 				address,
@@ -136,6 +137,7 @@ module.exports = {
 				return;
 			}
 			userServices.update(req.params.id, {
+				name,
 				photo,
 				phoneNumber,
 				address,

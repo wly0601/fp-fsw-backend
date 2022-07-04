@@ -51,4 +51,35 @@ app.put(
     }
   );
 
+  app.put(
+    "/api/product/picture/:id/cloudinary",
+    controllers.api.authentication.authorize,
+    uploadOnMemory.single("picture"),
+    (req, res) => {
+      if (req.user.id.toString() !== req.params.id.toString()){
+        res.status(401).json({
+          status: "Unauthorized",
+          message: "Product who can upload photo product is him/herself."
+        })
+        return
+      }
+      const fileBase64 = req.file.buffer.toString("base64");
+      const file = `data:${req.file.mimetype};base64,${fileBase64}`;
+  
+      cloudinary.uploader.upload(file, function (err, result) {
+        if (!!err) {
+          console.log(err);
+          return res.status(400).json({
+            message: "Gagal upload file!",
+          });
+        }
+  
+        res.status(201).json({
+          message: "Upload photo product berhasil",
+          url: result.url,
+        });
+      });
+    }
+  );
+
 module.exports = app;

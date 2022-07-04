@@ -73,6 +73,15 @@ apiRouter.delete("/api/product/:id",
 )
 
 /**
+ * Transaction History
+ */
+ apiRouter.post("/api/transaction/:id",
+ controllers.api.authentication.authorize,
+ controllers.api.transaction.createTransaction,
+)
+
+
+/**
  * City Resources
  */
 
