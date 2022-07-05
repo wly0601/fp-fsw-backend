@@ -60,12 +60,10 @@ apiRouter.put("/api/product/:id",
 )
 
 apiRouter.get("/api/product/:id",
-	controllers.api.authentication.authorize,
 	controllers.api.product.getProduct,
 )
 
 apiRouter.get("/api/products",
-	controllers.api.authentication.authorize,
 	controllers.api.product.getAllProducts,
 )
 
@@ -78,9 +76,9 @@ apiRouter.delete("/api/product/:id",
  * City Resources
  */
 
- apiRouter.get("/api/city/:id",
- controllers.api.authentication.authorize,
- controllers.api.cities.getCity,
+apiRouter.get("/api/city/:id",
+	controllers.api.authentication.authorize,
+	controllers.api.cities.getCity,
 )
 
 apiRouter.get("/api/cities",
@@ -92,13 +90,11 @@ apiRouter.get("/api/cities",
  * Category Resources
  */
 
- apiRouter.get("/api/category/:id",
- controllers.api.authentication.authorize,
- controllers.api.category.getCategory,
+apiRouter.get("/api/category/:id",
+	controllers.api.category.getCategory,
 )
 
 apiRouter.get("/api/categories",
-	controllers.api.authentication.authorize,
 	controllers.api.category.getAllCategories,
 )
 

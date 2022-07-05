@@ -316,9 +316,6 @@
     "get": {
       "summary": "Get Category by Id",
       "description": "Can Get Category, But Can not Edit and Delete",
-      "security": [{
-        "BearerTokenAuth": []
-      }],
       "responses": {
         "200": {
           "description": "Berhasil ditampilkan",
@@ -355,9 +352,6 @@
     "get": {
       "summary": "Get All Categories",
       "description": "Can Get Cities, But Can not Edit and Delete",
-      "security": [{
-        "BearerTokenAuth": []
-      }],
       "responses": {
         "200": {
           "description": "Berhasil ditampilkan",
@@ -386,9 +380,6 @@
         "summary": "List Products",
         "description": "Retrieve list of products",
         "operationId": "listProducts",
-        "security": [{
-          "BearerTokenAuth": []
-        }],
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -446,7 +437,6 @@
         "summary": "Get Product",
         "description": "Retrieve product detail",
         "operationId": "getProduct",
-        "security": [ { "BearerTokenAuth": [] } ],
         "responses": {
           "200": {
             "description": "A successful response.",
