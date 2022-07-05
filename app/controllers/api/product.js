@@ -27,7 +27,7 @@ module.exports = {
 				description,
 				images,
 				statusId: 1,
-				numberOfWhislist: 0,
+				numberOfWishlist: 0,
 			});
 
 			res.status(201).json(product);

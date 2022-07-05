@@ -68,7 +68,7 @@ module.exports = {
 							`https://picsum.photos/id/2${getTwoDigits}/200/300`
 						],
 						statusId: 1,
-						numberOfWhislist: Math.floor(Math.random()*5),
+						numberOfWishlist: Math.floor(Math.random()*5),
 						createdAt: new Date(),
 						updatedAt: new Date(),  						
 					})
