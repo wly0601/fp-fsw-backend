@@ -75,9 +75,14 @@ apiRouter.delete("/api/product/:id",
 /**
  * Transaction History
  */
- apiRouter.post("/api/transaction/:id",
+ apiRouter.post("/api/transaction",
  controllers.api.authentication.authorize,
  controllers.api.transaction.createTransaction,
+)
+
+apiRouter.get("/api/notifications",
+ controllers.api.authentication.authorize,
+ controllers.api.transaction.getAllNotification,
 )
 
 

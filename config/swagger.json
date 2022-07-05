@@ -216,10 +216,10 @@
         ]
       }
     },
-    "/api/transaction/{id}": {
+    "/api/transaction": {
       "post": {
         "summary": "Create Transaction",
-        "description": "Add new transaction on the database",
+        "description": "Add new transaction on the database, where id is productId",
         "operationId": "createTransaction",
         "security": [{
           "BearerTokenAuth": []
@@ -239,13 +239,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
           {
           "name": "body",
           "in": "body",
@@ -780,6 +773,9 @@
     "coreCreateTransactionRequest": {
       "type": "object",
       "properties": {
+        "productId":{
+          "type":"integer"
+        },
         "bargainPrice": {
           "type": "integer"
         }

@@ -13,6 +13,10 @@ module.exports = {
 		return productRepository.delete(id);
 	},
 
+	async listByCondition(request){
+		return productRepository.findAll(request);
+	},
+
 	async list() {
 		try {
 			const products = await productRepository.findAll();

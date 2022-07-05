@@ -25,8 +25,8 @@ module.exports = {
 		return Products.findByPk(id);
 	},
 
-	findAll() {
-		return Products.findAll();
+	findAll(request) {
+		return Products.findAll(request);
 	},
 
 	findOne(key) {
