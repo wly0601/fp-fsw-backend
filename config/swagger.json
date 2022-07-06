@@ -219,7 +219,7 @@
     "/api/transaction": {
       "post": {
         "summary": "Create Transaction",
-        "description": "Add new transaction on the database, where id is productId",
+        "description": "Add new transaction on the database",
         "operationId": "createTransaction",
         "security": [{
           "BearerTokenAuth": []
@@ -247,6 +247,37 @@
             "$ref": "#/definitions/coreCreateTransactionRequest"
           }
         }],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/user/{id}/notifications": {
+      "get": {
+        "summary": "Get Notification",
+        "description": "Can Get Notification",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }
+      ],
         "tags": [
           "Transaction"
         ]

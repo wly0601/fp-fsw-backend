@@ -80,9 +80,9 @@ apiRouter.delete("/api/product/:id",
  controllers.api.transaction.createTransaction,
 )
 
-apiRouter.get("/api/notifications",
+apiRouter.get("/api/user/:id/notifications",
  controllers.api.authentication.authorize,
- controllers.api.transaction.getAllNotification,
+ controllers.api.transaction.getAllNotificationUser,
 )
 
 

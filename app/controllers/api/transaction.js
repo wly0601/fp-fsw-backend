@@ -26,13 +26,13 @@ module.exports = {
 			});
 		}
 	},
-	async getAllNotification(req, res) {
+
+	async getAllNotificationUser(req, res) {
 		try {
 			var result = []
-
 			const getProduct = await productServices.listByCondition({
 				where: {
-					sellerId : req.user.id,
+					sellerId : req.params.id,
 				}
 			})
 
@@ -41,7 +41,7 @@ module.exports = {
 			})
 
 			const getTransactionSeller = await transactionServices.listByCondition({
-				where:{
+				where: {
 					productId : {
 						[Op.or]: getProductSeller
 					}
@@ -49,13 +49,18 @@ module.exports = {
 			})
 
 			const getTransactionBuyer = await transactionServices.listByCondition({
-				where:{
-					buyerId : req.user.id
+				where: {
+					buyerId : req.params.id
 				}
 			})
 
-			result = getProduct.concat(getTransactionSeller).concat(getTransactionBuyer)
+			result = [].concat(
+				getProduct,
+				getTransactionSeller, 
+				getTransactionBuyer
+			)
 
+			const message = {}
 			res.status(200).json({
 				status: "success",
 				data: result
