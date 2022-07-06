@@ -33,7 +33,7 @@ module.exports = {
 		return Products.findOne(key);
 	},
 
-	getTotalProducts() {
-		return Products.count();
+	getTotalProducts(request) {
+		return Products.count(request);
 	},
 };

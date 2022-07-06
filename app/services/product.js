@@ -38,4 +38,8 @@ module.exports = {
 	getOne(key) {
 		return productRepository.findOne(key);
 	},
+
+	total(request){
+		return productRepository.getTotalProducts(request)
+	}
 };

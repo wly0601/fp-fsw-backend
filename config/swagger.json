@@ -491,12 +491,12 @@
       "get": {
         "summary": "List Products",
         "description": "Retrieve list of products",
-        "operationId": "listProducts",
+        "operationId": "listCars",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/coreProduct"
+              "$ref": "#/definitions/coreListProductsResponse"
             }
           },
           "default": {
@@ -506,6 +506,28 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }          
+        ],
         "tags": [
           "Products"
         ]
@@ -841,7 +863,7 @@
         "meta": {
           "$ref": "#/definitions/ListProductsResponseMetaListProducts"
         },
-        "cars": {
+        "products": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/coreProduct"

@@ -1,4 +1,7 @@
 const productServices = require("../../services/product");
+const categoryServices = require("../../services/categories")
+const application = require("./application.js")
+const { Op } = require("sequelize")
 
 module.exports = {
 	async createProduct(req, res) {
@@ -132,11 +135,22 @@ module.exports = {
 
 	async getAllProducts(req, res) {
 		try {
-			const getAll = await productServices.list();
+			const query = await application.getQuery(req)
+			console.log(query)
+			const limit = req.query.pageSize;
+			const products = await productServices.listByCondition(query);
+			const productCount = await productServices.total({
+				where: query.where,
+				// include: query.include
+			})
+
+    	const pagination = application.generatePagination(req, productCount);		
 
 			res.status(200).json({
-				status: "success",
-				data: getAll
+				products,
+				meta: {
+					pagination,
+				}
 			})
 		} catch (err) {
 			res.status(400).json({
