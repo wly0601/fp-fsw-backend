@@ -1,6 +1,7 @@
 const productServices = require("../../services/product");
 const categoryServices = require("../../services/categories")
 const application = require("./application.js")
+const { Categories, Users, Cities } = require("../../models")
 const { Op } = require("sequelize")
 
 module.exports = {
@@ -112,7 +113,25 @@ module.exports = {
 
 	async getProduct(req, res) {
 		try {
-			const product = await productServices.get(req.params.id)
+			const product = await productServices.getOne({
+				where: {
+					id: req.params.id
+				},
+				include: [
+					{
+						model: Users,
+						attributes: {
+							exclude: ["encryptedPassword"]
+						},
+						include: {
+							model: Cities,
+						}
+					},
+					{
+						model: Categories
+					}
+				]
+			})
 
 			if (!product) {
 				res.status(404).json({
@@ -144,7 +163,7 @@ module.exports = {
 				// include: query.include
 			})
 
-    	const pagination = application.generatePagination(req, productCount);		
+			const pagination = application.generatePagination(req, productCount);		
 
 			res.status(200).json({
 				products,
