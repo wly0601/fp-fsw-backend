@@ -117,6 +117,35 @@ module.exports = {
 		}
 	},
 
+	async listSellerProduct(req, res) {
+		try {
+			if (req.user.id.toString() !== req.params.id.toString()) {
+				res.status(401).json({
+					status: "Failed",
+					message: "Unauthorized."
+				});
+				return
+			}
+
+			const products = await productServices.listByCondition({
+				where: {
+					statusId: 1,
+					sellerId: req.params.id
+				}
+			});
+
+			res.status(200).json(products);
+
+		} catch (err) {
+			res.status(400).json({
+				error: {
+					name: err.name,
+					message: err.message,
+				}
+			});
+		}
+	},
+
 	async getProduct(req, res) {
 		try {
 			const product = await productServices.getOne({

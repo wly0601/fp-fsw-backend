@@ -63,6 +63,11 @@ apiRouter.get("/api/product/:id",
 	controllers.api.product.getProduct,
 )
 
+apiRouter.get("/api/user/:id/products",
+	controllers.api.authentication.authorize,
+	controllers.api.product.listSellerProduct,
+)
+
 apiRouter.get("/api/products",
 	controllers.api.product.getAllProducts,
 )
@@ -75,24 +80,34 @@ apiRouter.delete("/api/product/:id",
 /**
  * Transaction History
  */
- apiRouter.post("/api/transaction",
- controllers.api.authentication.authorize,
- controllers.api.transaction.createTransaction,
+apiRouter.post("/api/transaction",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.createTransaction,
 )
 
-apiRouter.post("/api/transaction/:id",
- controllers.api.authentication.authorize,
- controllers.api.transaction.getTransactionById,
+apiRouter.get("/api/transaction/:id",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.getTransactionById,
 )
 
-apiRouter.get("/api/buyer/:buyerId/seller/:sellerId/transaction",
- controllers.api.authentication.authorize,
- controllers.api.transaction.listTransactionBuyerOnSeller,
+apiRouter.put("/api/transaction/:id",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.updateTransaction,
+)
+
+apiRouter.put("/api/transaction/:id/confirmation",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.confirmationSeller,
+)
+
+apiRouter.get("/api/buyer/:buyerId/transaction",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.listTransactionBuyerOnSeller,
 )
 
 apiRouter.get("/api/user/:id/notifications",
- controllers.api.authentication.authorize,
- controllers.api.transaction.getAllNotificationUser,
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.getAllNotificationUser,
 )
 
 /**

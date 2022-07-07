@@ -238,8 +238,7 @@
             }
           }
         },
-        "parameters": [
-          {
+        "parameters": [{
           "name": "body",
           "in": "body",
           "required": true,
@@ -247,6 +246,157 @@
             "$ref": "#/definitions/coreCreateTransactionRequest"
           }
         }],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/buyer/{buyerId}/transaction": {
+      "get": {
+        "summary": "List Transaction Buyer on Seller that Logged in",
+        "description": "List Transaction Buyer On Specific Seller (That logged in)",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "buyerId",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/transaction/{id}": {
+      "get": {
+        "summary": "Get Transaction By Id",
+        "description": "Get Transaction By Id ",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Transaction"
+        ]
+      },
+      "put": {
+        "summary": "Update Transaction",
+        "description": "Update Transaction",
+        "operationId": "updateTransaction",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accBySeller": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/transaction/{id}/confirmation": {
+      "put": {
+        "summary": "Update Confirmation Seller",
+        "description": "Update Confirmation Seller to Cancel or SoldOut",
+        "operationId": "confirmationSeller",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "isCanceled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
         "tags": [
           "Transaction"
         ]
@@ -276,8 +426,7 @@
           "required": true,
           "type": "integer",
           "format": "int64"
-        }
-      ],
+        }],
         "tags": [
           "Transaction"
         ]
@@ -487,6 +636,43 @@
         ]
       }
     },
+    "/api/user/{id}/products": {
+      "get": {
+        "summary": "Get List Products that sold by specific seller",
+        "description": "Get List Products that sold by specific seller id",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreProduct"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Products"
+        ]
+      }
+    },
     "/api/products": {
       "get": {
         "summary": "List Products",
@@ -506,8 +692,7 @@
             }
           }
         },
-        "parameters": [
-          {
+        "parameters": [{
             "name": "page",
             "in": "query",
             "required": false,
@@ -526,7 +711,7 @@
             "in": "query",
             "required": false,
             "type": "string"
-          }          
+          }
         ],
         "tags": [
           "Products"
@@ -826,8 +1011,8 @@
     "coreCreateTransactionRequest": {
       "type": "object",
       "properties": {
-        "productId":{
-          "type":"integer"
+        "productId": {
+          "type": "integer"
         },
         "bargainPrice": {
           "type": "integer"

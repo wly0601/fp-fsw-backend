@@ -1,8 +1,11 @@
 const transactionServices = require("../../services/transaction");
 const productServices = require("../../services/product");
 const application = require("./application");
+const userServices = require("../../services/users");
+
 const {
-  Products,Users,Cities
+  Products,
+  Cities
 } = require("../../models")
 const {
   Op
@@ -53,7 +56,7 @@ module.exports = {
         return
       }
 
-      res.status(200).json(transcation);
+      res.status(200).json(transaction);
     } catch (err) {
       res.status(400).json({
         error: {
@@ -68,57 +71,47 @@ module.exports = {
     try {
       const {
         buyerId,
-        sellerId
       } = req.params
 
-      if (buyerId.toString() === sellerId.toString()) {
-        res.status(400).json({
-          status: "FAIL",
-          message: "Request Cannot be Established."
-        });
-        return
-      }
+      const getBuyerData = await userServices.getOne({
+        where:{
+          id: buyerId,
+        },
+        attributes: {
+          exclude: ["encryptedPassword"]
+        },
+        include:{
+          model: Cities,
+          as: "city",
+          attributes: ["name"]
+        }
+      })
 
-      if (req.user.id.toString() !== sellerId.toString()) {
-        res.status(401).json({
-          status: "FAIL",
-          message: "Unauthorized."
-        });
-        return
-      }
-
-      var getProductsByBuyer = await transactionServices.listByCondition({
+      const getProductsByBuyer = await transactionServices.listByCondition({
         where: {
           buyerId: buyerId
         },
         attributes: {
-          exclude: ["createdAt","updatedAt"]
+          exclude: ["createdAt", "updatedAt"]
         },
         include: [
           {
             model: Products,
             as: "product",
             where: {
-              sellerId: sellerId
+              sellerId: req.user.id
             },
             attributes: {
-              exclude: ["createdAt","updatedAt"]
+              exclude: ["createdAt", "updatedAt"]
             },
-          },
-          {
-            model: Users,
-            as: "buyer",
-            attributes: ["name"],
-            include: {
-              model: Cities, 
-              as: "city",
-              attributes: ["name"]
-            }
           }
         ]
       })
 
-      res.status(200).json(getProductsByBuyer);
+      res.status(200).json({
+        buyer: getBuyerData,
+        order: getProductsByBuyer
+      });
     } catch (err) {
       res.status(400).json({
         error: {
@@ -126,6 +119,136 @@ module.exports = {
           message: err.message,
         }
       });
+    }
+  },
+
+  async updateTransaction(req, res) {
+    try {
+      const {
+        accBySeller
+      } = req.body
+      const dateOfAccOrNot = new Date()
+ 
+      const transaction = await transactionServices.get(req.params.id)
+      await transactionServices.update(req.params.id, {
+        accBySeller,
+        dateOfAccOrNot,
+      });
+
+      if (!accBySeller) {
+        await productServices.update(transaction.productId, {
+          statusId: 1,
+        })
+      }
+
+      res.status(201).json({
+        status: "Success",
+        message: `Transaction with id ${req.params.id} has been updated.`,
+      });
+    } catch (err) {
+      res.status(422).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
+
+  async confirmationSeller(req, res) {
+    try {
+      const {
+        isCanceled
+      } = req.body
+
+      const transaction = await transactionServices.get(req.params.id)
+      await transactionServices.update(req.params.id, {
+        isCanceled,
+      });
+
+      if (!isCanceled) {
+        await productServices.update(transaction.productId, {
+          statusId: 1,
+        })
+      } else {
+        await productServices.update(transaction.productId, {
+          statusId: 3,
+        })
+      }
+
+      res.status(201).json({
+        status: "Success",
+      });
+    } catch (err) {
+      res.status(422).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
+
+  async historySeller(req, res) {
+    try {
+      const getHistorySeller = await transactionServices.listByCondition({
+        include: {
+          model: Products,
+          as: "product",
+          where: {
+            id: req.params.id,
+          }
+        }
+      })
+      // const result = getHistorySeller.map((transaction) => {
+      //   const tp = transaction.product
+      //   //CASE IF PRODUCT NEEDS TO BE CONFIRMED BY SELLER
+      //   if (transaction.accBySeller === null && tp.price === transaction.bargainPrice) {
+      //     return ({
+      //       message: "Penawaran Produk",
+      //       image: tp.images[0],
+      //       name: tp.name,
+      //       price: application.priceFormat(transaction.bargainPrice),
+      //       date: application.timeFormat(transaction.dateOfBargain)
+      //     })
+      //   } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
+      //     return ({
+      //       message: "Penawaran Produk",
+      //       image: tp.images[0],
+      //       name: tp.name,
+      //       price: application.priceFormat(tp.price),
+      //       bargain: `Ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+      //       date: application.timeFormat(transaction.updatedAt)
+      //     })
+      //   }
+
+      //   //CASE IF PRODUCT HAS ALREADY CONFIRMED BY SELLER
+      //   if (transaction.accBySeller === false) {
+      //     return ({
+      //       message: "Penawaran Produk",
+      //       detail: "Yang dicoret bargain",
+      //       image: tp.images[0],
+      //       name: tp.name,
+      //       price: application.priceFormat(tp.price),
+      //       bargain: application.priceFormat(transaction.bargainPrice),
+      //       date: application.timeFormat(transaction.dateOfBargain)
+      //     })
+      //   } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
+      //     return ({
+      //       message: "Penawaran Produk",
+      //       image: tp.images[0],
+      //       name: tp.name,
+      //       price: application.priceFormat(tp.price),
+      //       bargain: application.priceFormat(transaction.bargainPrice),
+      //       date: application.timeFormat(transaction.updatedAt)
+      //     })
+      //   }
+
+
+      // })
+
+    } catch (err) {
+
     }
   },
 
@@ -150,6 +273,7 @@ module.exports = {
         },
         include: {
           model: Products,
+          as: "product"
         }
       })
 
@@ -162,6 +286,7 @@ module.exports = {
         },
         include: {
           model: Products,
+          as: "product"
         }
       })
 
@@ -190,6 +315,7 @@ module.exports = {
         var show;
         if (result.information === "Product of this user.") {
           show = result.product
+
           return ({
             msg: "Berhasil Diterbitkan",
             productId: show.id,
@@ -204,9 +330,9 @@ module.exports = {
           return ({
             msg: "Penawaran Produk",
             transactionId: show.id,
-            image: show.Product.images[0],
-            name: show.Product.name,
-            price: application.priceFormat(show.Product.price),
+            image: show.product.images[0],
+            name: show.product.name,
+            price: application.priceFormat(show.product.price),
             bargainPrice: application.priceFormat(show.bargainPrice),
             time: application.timeFormat(show.dateOfBargain),
             information: "Please GET /api/transaction/transactionId"
