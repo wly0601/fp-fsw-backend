@@ -7,9 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.Users, {
         foreignKey: "buyerId",
+        as: "buyer",
       });
       this.belongsTo(models.Products, {
         foreignKey: "productId",
+        as: "product",
       });
     }
   }
@@ -19,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     bargainPrice: DataTypes.INTEGER,
     dateOfBargain: DataTypes.DATE,
     accBySeller: DataTypes.BOOLEAN,
-    dateOfAccOrNot: DataTypes.DATE
+    dateOfAccOrNot: DataTypes.DATE,
+    isCanceled: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'TransactionHistory',

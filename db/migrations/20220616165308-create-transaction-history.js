@@ -38,6 +38,9 @@ module.exports = {
       dateOfAccOrNot: {
         type: Sequelize.DATE
       },
+      isCanceled: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

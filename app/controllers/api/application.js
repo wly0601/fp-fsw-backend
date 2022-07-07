@@ -1,17 +1,57 @@
 const categoryServices = require("../../services/categories")
-const {Op} = require("sequelize")
-const { Categories, Cities, Users } = require("../../models")
+const {
+	Op
+} = require("sequelize")
+const {
+	Categories,
+	Cities,
+	Users
+} = require("../../models")
 
 module.exports = {
-	getRoot(req, res){
+	getRoot(req, res) {
 		res.status(200).json({
 			status: "OK",
 			message: "Second Hand API is up and running!",
 		});
 	},
 
-	generatePagination(req, count){
-		const { page = 1, pageSize = 16} = req.query;
+	priceFormat(data) {
+		const priceStr = data.toString();
+		var i = priceStr.length;
+		var renderPrice = '';
+		var counter = 0;
+
+		while (i > 0) {
+			renderPrice = priceStr[i - 1] + renderPrice;
+			i--;
+			counter++;
+			if (counter == 3 && i !== 0) {
+				renderPrice = '.' + renderPrice;
+				counter = 0;
+			}
+		}
+
+		return `Rp ${renderPrice}`;
+	},
+
+	timeFormat(date) {
+		const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		if (date.getMinutes() < 10) {
+			var minutes = '0' + date.getMinutes().toString();
+		} else {
+			minutes = date.getMinutes();
+		}
+
+		const timeRender = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}, ${date.getHours()}:${minutes}`
+
+		return timeRender;
+	},
+
+	generatePagination(req, count) {
+		const {
+			page = 1, pageSize = 16
+		} = req.query;
 		const pageNumber = Math.ceil(count / pageSize);
 
 		return {
@@ -22,13 +62,16 @@ module.exports = {
 		}
 	},
 
-	async getQuery(req){
-		const { category, search } = req.query;
+	async getQuery(req) {
+		const {
+			category,
+			search
+		} = req.query;
 		const limit = req.query.pageSize || 16;
 		const where = {};
 
 		where.statusId = {
-			[Op.ne] : 3
+			[Op.ne]: 3
 		}
 
 		// const include = [
@@ -56,7 +99,7 @@ module.exports = {
 		const query = {
 			// include,
 			where,
-			limit		
+			limit
 		}
 
 		return query

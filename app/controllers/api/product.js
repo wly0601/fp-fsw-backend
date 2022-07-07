@@ -1,8 +1,14 @@
 const productServices = require("../../services/product");
 const categoryServices = require("../../services/categories")
 const application = require("./application.js")
-const { Categories, Users, Cities } = require("../../models")
-const { Op } = require("sequelize")
+const {
+	Categories,
+	Users,
+	Cities
+} = require("../../models")
+const {
+	Op
+} = require("sequelize")
 
 module.exports = {
 	async createProduct(req, res) {
@@ -117,18 +123,22 @@ module.exports = {
 				where: {
 					id: req.params.id
 				},
-				include: [
-					{
+				include: [{
 						model: Users,
+						as: "seller",
 						attributes: {
 							exclude: ["encryptedPassword"]
 						},
 						include: {
 							model: Cities,
+							as: "city",
+							attributes: ["name"]
 						}
 					},
 					{
-						model: Categories
+						model: Categories,
+						as: "category",
+						attributes: ["name"]
 					}
 				]
 			})
@@ -163,7 +173,7 @@ module.exports = {
 				// include: query.include
 			})
 
-			const pagination = application.generatePagination(req, productCount);		
+			const pagination = application.generatePagination(req, productCount);
 
 			res.status(200).json({
 				products,

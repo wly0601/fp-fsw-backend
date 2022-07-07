@@ -80,11 +80,20 @@ apiRouter.delete("/api/product/:id",
  controllers.api.transaction.createTransaction,
 )
 
+apiRouter.post("/api/transaction/:id",
+ controllers.api.authentication.authorize,
+ controllers.api.transaction.getTransactionById,
+)
+
+apiRouter.get("/api/buyer/:buyerId/seller/:sellerId/transaction",
+ controllers.api.authentication.authorize,
+ controllers.api.transaction.listTransactionBuyerOnSeller,
+)
+
 apiRouter.get("/api/user/:id/notifications",
  controllers.api.authentication.authorize,
  controllers.api.transaction.getAllNotificationUser,
 )
-
 
 /**
  * City Resources
