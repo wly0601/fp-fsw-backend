@@ -74,30 +74,23 @@ module.exports = {
 			[Op.ne]: 3
 		}
 
-		// const include = [
-		// 	{
-		// 		model: Categories,
-		// 		where
-		// 	},
-		// 	{
-		// 		model: Users,
-		// 		include: {
-		// 			model: Cities,
-		// 		}
-		// 	}
-		// ]
+		const include = {
+			model: Categories,
+			as: "category",
+			attributes: ["name"]
+		};
 
-		// if (category) {
-		// 	const getCategoryName = await categoryServices.getOne({
-		// 		where : {
-		// 			name: category
-		// 			}
-		// 		})
-		// 	where.categoryId = getCategoryName.id
-		// }
+		if (category) {
+			const getCategoryName = await categoryServices.getOne({
+				where : {
+					name: category
+					}
+				})
+			where.categoryId = getCategoryName.id
+		}
 
 		const query = {
-			// include,
+			include,
 			where,
 			limit
 		}

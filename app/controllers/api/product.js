@@ -170,7 +170,7 @@ module.exports = {
 			const products = await productServices.listByCondition(query);
 			const productCount = await productServices.total({
 				where: query.where,
-				// include: query.include
+				include: query.include
 			})
 
 			const pagination = application.generatePagination(req, productCount);
