@@ -78,12 +78,13 @@ module.exports = {
       const randAlpha = getRandAlphabet();
       const getRandDigits = getRandTwoDigits();
       const randCity = getRandCity();
+      const rand = Math.floor(Math.random()*10);
 
       return ({
         name,
         email: `${emailBuild.toLowerCase()}@gmail.com`,
         encryptedPassword,
-        photo: "https://randomuser.me/api/portraits/lego/7.jpg",
+        photo: `https://randomuser.me/api/portraits/lego/${rand}.jpg`,
         phoneNumber: `08${Math.random().toString().substring(5,15)}`,
         address: `Jalan Binar Blok ${randAlpha} Nomor ${getRandDigits}, ${randCity.city}.`,
         cityId: randCity.id,

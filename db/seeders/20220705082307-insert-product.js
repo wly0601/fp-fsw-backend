@@ -44,7 +44,7 @@ module.exports = {
 			}
 		];
 
-		const users = new Array(15)
+		const users = new Array(8)
 		for (let i = 0; i < users.length; i++) {
 			users[i] = i+1;
 		}
@@ -60,12 +60,12 @@ module.exports = {
 						sellerId: index + 1,
 						price: product.basePrice + deviationPrice,
 						categoryId: product.categoryId,
-						description: "Lorem ipsum dolor sit amet",
+						description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sem a leo feugiat accumsan eget quis libero. Integer imperdiet ante nunc, luctus laoreet mauris ultrices eget. Nulla vulputate consequat tincidunt. Etiam bibendum egestas placerat. Mauris in sodales ante. Donec ligula nisl, mollis ac ante eget, consectetur efficitur purus. Vestibulum laoreet turpis nec gravida fringilla. Praesent feugiat tempus tristique. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec sem a leo feugiat accumsan eget quis libero. Integer imperdiet ante nunc, luctus laoreet mauris ultrices eget. Nulla vulputate consequat tincidunt. Etiam bibendum egestas placerat. Mauris in sodales ante. Donec ligula nisl, mollis ac ante eget, consectetur efficitur purus. Vestibulum laoreet turpis nec gravida fringilla. Praesent feugiat tempus tristique.",
 						images: [
-							`https://picsum.photos/id/1${getTwoDigits}/200/300`,
-							`https://picsum.photos/id/${getTwoDigits}2/200/300`,
-							`https://picsum.photos/id/${getTwoDigits}1/200/300`,
-							`https://picsum.photos/id/2${getTwoDigits}/200/300`
+							`https://picsum.photos/id/1${getTwoDigits}/600`,
+							`https://picsum.photos/id/${getTwoDigits}2/600`,
+							`https://picsum.photos/id/${getTwoDigits}1/600`,
+							`https://picsum.photos/id/2${getTwoDigits}/600`
 						],
 						statusId: 1,
 						numberOfWishlist: Math.floor(Math.random()*5),

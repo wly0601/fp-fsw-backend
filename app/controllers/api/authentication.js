@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userServices = require("../../services/users");
+const { Cities } = require("../../models")
 
 async function checkPassword(password, encryptedPassword) {
 	return await bcrypt.compareSync(password, encryptedPassword)
@@ -169,7 +170,19 @@ module.exports = {
 
 	async getUser(req, res) {
 		try {
-			const user = await userServices.get(req.params.id)
+			const user = await userServices.getOne({
+				where: {
+					id: req.params.id
+				},
+				include: {
+					model: Cities,
+					as: "city",
+					attributes: ["name"]
+				},
+				attributes: {
+					exclude: ["encryptedPassword"]
+				}
+			})
 
 			if (!user) {
 				res.status(404).json({

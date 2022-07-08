@@ -30,7 +30,6 @@ apiRouter.get("/api/who-am-i",
 )
 
 apiRouter.get("/api/user/:id",
-	controllers.api.authentication.authorize,
 	controllers.api.authentication.getUser,
 )
 

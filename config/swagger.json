@@ -186,6 +186,37 @@
         ]
       }
     },
+    "/api/user/{id}": {
+      "get": {
+        "summary": "Get User data By Id",
+        "description": "Retrieve user data by Id",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/users": {
       "get": {
         "summary": "Get All User",
