@@ -194,8 +194,6 @@ module.exports = {
 	async getAllProducts(req, res) {
 		try {
 			const query = await application.getQuery(req)
-			console.log(query)
-			const limit = req.query.pageSize;
 			const products = await productServices.listByCondition(query);
 			const productCount = await productServices.total({
 				where: query.where,

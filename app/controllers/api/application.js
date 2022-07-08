@@ -48,18 +48,44 @@ module.exports = {
 		return timeRender;
 	},
 
+	getOffset(req,count){
+		const { page = 1, pageSize = 16 } = req.query;
+		const offset = (page - 1)*pageSize; 
+		return offset;		
+	},
+
 	generatePagination(req, count) {
 		const {
 			page = 1, pageSize = 16
 		} = req.query;
-		const pageNumber = Math.ceil(count / pageSize);
+		const numberOfPage = Math.ceil(count / pageSize);
 
 		return {
 			page,
-			pageNumber,
+			numberOfPage,
 			pageSize,
 			count
 		}
+	},
+
+	async handleSearchQuery(req){
+		const querySearch = req.query.search.split(' ')
+		const comparison = [];
+
+		for(let i = 0; i < querySearch.length; i++){
+			comparison.push({
+				name : {
+					[Op.iLike] : '%' + querySearch[i],
+				},
+			});
+
+			// comparison.push({
+			// 	city : {
+			// 		[Op.iLike] : '%' + querySearch[i],
+			// 	},
+			// });
+		}		
+		return comparison
 	},
 
 	async getQuery(req) {
@@ -67,11 +93,19 @@ module.exports = {
 			category,
 			search
 		} = req.query;
+		const offset = this.getOffset(req)
 		const limit = req.query.pageSize || 16;
-		const where = {};
+		const order = [
+			["numberOfWishlist", "DESC"],
+			["price", "ASC"]
+		]
 
-		where.statusId = {
+		const statusId = {
 			[Op.ne]: 3
+		}
+
+		var where = {
+			statusId
 		}
 
 		const include = {
@@ -83,16 +117,37 @@ module.exports = {
 		if (category) {
 			const getCategoryName = await categoryServices.getOne({
 				where : {
-					name: category
+					name: {
+							[Op.iLike]: category
+						}
 					}
 				})
-			where.categoryId = getCategoryName.id
+
+			if(!!getCategoryName) {
+				where.categoryId = getCategoryName.id
+			}
 		}
+
+		var getSearchResult;
+		if(!!search){
+			getSearchResult = await this.handleSearchQuery(req);
+		}
+		
+		if(!!getSearchResult){
+			where = {
+				statusId,
+				[Op.or] : getSearchResult
+			}
+		}
+
+		console.log(where)
 
 		const query = {
 			include,
 			where,
-			limit
+			offset,
+			limit,
+			order
 		}
 
 		return query
