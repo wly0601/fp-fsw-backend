@@ -74,13 +74,13 @@ module.exports = {
       } = req.params
 
       const getBuyerData = await userServices.getOne({
-        where:{
+        where: {
           id: buyerId,
         },
         attributes: {
           exclude: ["encryptedPassword"]
         },
-        include:{
+        include: {
           model: Cities,
           as: "city",
           attributes: ["name"]
@@ -94,18 +94,16 @@ module.exports = {
         attributes: {
           exclude: ["createdAt", "updatedAt"]
         },
-        include: [
-          {
-            model: Products,
-            as: "product",
-            where: {
-              sellerId: req.user.id
-            },
-            attributes: {
-              exclude: ["createdAt", "updatedAt"]
-            },
-          }
-        ]
+        include: [{
+          model: Products,
+          as: "product",
+          where: {
+            sellerId: req.user.id
+          },
+          attributes: {
+            exclude: ["createdAt", "updatedAt"]
+          },
+        }]
       })
 
       res.status(200).json({
@@ -128,7 +126,25 @@ module.exports = {
         accBySeller
       } = req.body
       const dateOfAccOrNot = new Date()
- 
+
+      const getTransactionId = await transactionServices.getOne({
+        where: {
+          id: req.params.id,
+        },
+        include: {
+          model: Products,
+          as: "product"
+        }
+      })
+
+      if (getTransactionId.product.sellerId.toString() !== req.user.id.toString()) {
+        res.status(401).json({
+          status: "Unauthorized",
+          message: "Can't see other people transaction"
+        });
+        return;
+      };
+
       const transaction = await transactionServices.get(req.params.id)
       await transactionServices.update(req.params.id, {
         accBySeller,
@@ -160,6 +176,24 @@ module.exports = {
       const {
         isCanceled
       } = req.body
+
+      const getTransactionId = await transactionServices.getOne({
+        where: {
+          id: req.params.id,
+        },
+        include: {
+          model: Products,
+          as: "product"
+        }
+      })
+      console.log(getTransactionId)
+      if (getTransactionId.product.sellerId.toString() !== req.user.id.toString()) {
+        res.status(401).json({
+          status: "Unauthorized",
+          message: "Can't see other people transaction"
+        });
+        return;
+      };
 
       const transaction = await transactionServices.get(req.params.id)
       await transactionServices.update(req.params.id, {
@@ -255,7 +289,7 @@ module.exports = {
   async getAllNotificationUser(req, res) {
     try {
       var result = []
-      if (req.params.id.toString() !== req.user.id.toString()){
+      if (req.params.id.toString() !== req.user.id.toString()) {
         res.status(401).json({
           status: "Unauthorized",
           message: "User who can see their notification is him/herself."
@@ -346,7 +380,7 @@ module.exports = {
             time: application.timeFormat(show.dateOfBargain),
             information: "Please go to offering page and GET /api/user/buyerId/transaction"
           })
-        } else if(result.information === "Product of this user that want to buy." && result.tb.accBySeller === true){
+        } else if (result.information === "Product of this user that want to buy." && result.tb.accBySeller === true) {
           show = result.tb
           return ({
             msg: "Penawaran Produk",
