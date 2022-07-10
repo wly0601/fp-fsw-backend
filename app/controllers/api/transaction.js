@@ -323,7 +323,7 @@ module.exports = {
             name: show.name,
             price: application.priceFormat(show.price),
             time: application.timeFormat(show.createdAt),
-            information: "Please GET /api/product/productId"
+            information: "Please Change to edit product page and GET /api/product/productId"
           })
         } else if (result.information === "Product of this user that is bargained by someone else.") {
           show = result.ts
@@ -332,10 +332,39 @@ module.exports = {
             transactionId: show.id,
             image: show.product.images[0],
             name: show.product.name,
+            buyerId: show.buyerId,
             price: application.priceFormat(show.product.price),
             bargainPrice: application.priceFormat(show.bargainPrice),
             time: application.timeFormat(show.dateOfBargain),
-            information: "Please GET /api/transaction/transactionId"
+            information: "Please go to offering page and GET /api/user/buyerId/transaction"
+          })
+        } else if(result.information === "Product of this user that want to buy." && result.tb.accBySeller === true){
+          show = result.tb
+          return ({
+            msg: "Penawaran Produk",
+            transactionId: show.id,
+            image: show.product.images[0],
+            name: show.product.name,
+            buyerId: show.buyerId,
+            price: application.priceFormat(show.product.price),
+            bargainPrice: `Berhasil Ditawar ${application.priceFormat(show.bargainPrice)}`,
+            time: application.timeFormat(show.dateOfAccOrNot),
+            anotherMsg: "Kamu akan dihubungi penjual via WhatsApp",
+            moreDetail: "price awalnya dicoret"
+          })
+        } else if (result.information === "Product of this user that want to buy." && result.tb.accBySeller === false) {
+          show = result.tb
+          return ({
+            msg: "Penawaran Produk",
+            transactionId: show.id,
+            productId: show.productId,
+            image: show.product.images[0],
+            name: show.product.name,
+            buyerId: show.buyerId,
+            price: application.priceFormat(show.product.price),
+            bargainPrice: `Gagal Ditawar ${application.priceFormat(show.bargainPrice)}`,
+            time: application.timeFormat(show.dateOfAccOrNot),
+            detail: "Please go to product page and GET /api/product/productId"
           })
         }
       })

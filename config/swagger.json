@@ -669,8 +669,8 @@
 		},
 		"/api/user/{id}/products": {
 			"get": {
-				"summary": "Get List Products that sold by specific seller",
-				"description": "Get List Products that sold by specific seller id",
+				"summary": "Get List Products that created by specific seller",
+				"description": "Get List Products that created by specific seller id",
 				"security": [{
 					"BearerTokenAuth": []
 				}],

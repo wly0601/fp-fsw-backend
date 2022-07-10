@@ -119,14 +119,6 @@ module.exports = {
 
 	async listSellerProduct(req, res) {
 		try {
-			if (req.user.id.toString() !== req.params.id.toString()) {
-				res.status(401).json({
-					status: "Failed",
-					message: "Unauthorized."
-				});
-				return
-			}
-
 			const products = await productServices.listByCondition({
 				where: {
 					statusId: 1,
