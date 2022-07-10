@@ -168,11 +168,11 @@ module.exports = {
 
       if (!isCanceled) {
         await productServices.update(transaction.productId, {
-          statusId: 1,
+          statusId: 3,
         })
       } else {
         await productServices.update(transaction.productId, {
-          statusId: 3,
+          statusId: 1,
         })
       }
 
@@ -189,72 +189,80 @@ module.exports = {
     }
   },
 
-  async historySeller(req, res) {
-    try {
-      const getHistorySeller = await transactionServices.listByCondition({
-        include: {
-          model: Products,
-          as: "product",
-          where: {
-            id: req.params.id,
-          }
-        }
-      })
-      // const result = getHistorySeller.map((transaction) => {
-      //   const tp = transaction.product
-      //   //CASE IF PRODUCT NEEDS TO BE CONFIRMED BY SELLER
-      //   if (transaction.accBySeller === null && tp.price === transaction.bargainPrice) {
-      //     return ({
-      //       message: "Penawaran Produk",
-      //       image: tp.images[0],
-      //       name: tp.name,
-      //       price: application.priceFormat(transaction.bargainPrice),
-      //       date: application.timeFormat(transaction.dateOfBargain)
-      //     })
-      //   } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
-      //     return ({
-      //       message: "Penawaran Produk",
-      //       image: tp.images[0],
-      //       name: tp.name,
-      //       price: application.priceFormat(tp.price),
-      //       bargain: `Ditawar ${application.priceFormat(transaction.bargainPrice)}`,
-      //       date: application.timeFormat(transaction.updatedAt)
-      //     })
-      //   }
+  // async historySeller(req, res) {
+  //   try {
+  //     const getHistorySeller = await transactionServices.listByCondition({
+  //       include: {
+  //         model: Products,
+  //         as: "product",
+  //         where: {
+  //           id: req.params.id,
+  //         }
+  //       }
+  //     })
+  //     const result = getHistorySeller.map((transaction) => {
+  //       const tp = transaction.product
+  //       //CASE IF PRODUCT NEEDS TO BE CONFIRMED BY SELLER
+  //       if (transaction.accBySeller === null && tp.price === transaction.bargainPrice) {
+  //         return ({
+  //           message: "Penawaran Produk",
+  //           image: tp.images[0],
+  //           name: tp.name,
+  //           price: application.priceFormat(transaction.bargainPrice),
+  //           date: application.timeFormat(transaction.dateOfBargain)
+  //         })
+  //       } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
+  //         return ({
+  //           message: "Penawaran Produk",
+  //           image: tp.images[0],
+  //           name: tp.name,
+  //           price: application.priceFormat(tp.price),
+  //           bargain: `Ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+  //           date: application.timeFormat(transaction.updatedAt)
+  //         })
+  //       }
 
-      //   //CASE IF PRODUCT HAS ALREADY CONFIRMED BY SELLER
-      //   if (transaction.accBySeller === false) {
-      //     return ({
-      //       message: "Penawaran Produk",
-      //       detail: "Yang dicoret bargain",
-      //       image: tp.images[0],
-      //       name: tp.name,
-      //       price: application.priceFormat(tp.price),
-      //       bargain: application.priceFormat(transaction.bargainPrice),
-      //       date: application.timeFormat(transaction.dateOfBargain)
-      //     })
-      //   } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
-      //     return ({
-      //       message: "Penawaran Produk",
-      //       image: tp.images[0],
-      //       name: tp.name,
-      //       price: application.priceFormat(tp.price),
-      //       bargain: application.priceFormat(transaction.bargainPrice),
-      //       date: application.timeFormat(transaction.updatedAt)
-      //     })
-      //   }
+  //       //CASE IF PRODUCT HAS ALREADY CONFIRMED BY SELLER
+  //       if (transaction.accBySeller === false) {
+  //         return ({
+  //           message: "Penawaran Produk",
+  //           detail: "Yang dicoret bargain",
+  //           image: tp.images[0],
+  //           name: tp.name,
+  //           price: application.priceFormat(tp.price),
+  //           bargain: application.priceFormat(transaction.bargainPrice),
+  //           date: application.timeFormat(transaction.dateOfBargain)
+  //         })
+  //       } else if (transaction.accBySeller === null && tp.price !== transaction.bargainPrice) {
+  //         return ({
+  //           message: "Penawaran Produk",
+  //           image: tp.images[0],
+  //           name: tp.name,
+  //           price: application.priceFormat(tp.price),
+  //           bargain: application.priceFormat(transaction.bargainPrice),
+  //           date: application.timeFormat(transaction.updatedAt)
+  //         })
+  //       }
 
 
-      // })
+  //     })
 
-    } catch (err) {
+  //   } catch (err) {
 
-    }
-  },
+  //   }
+  // },
 
   async getAllNotificationUser(req, res) {
     try {
       var result = []
+      if (req.params.id.toString() !== req.user.id.toString()){
+        res.status(401).json({
+          status: "Unauthorized",
+          message: "User who can see their notification is him/herself."
+        });
+        return;
+      };
+
       const getProduct = await productServices.listByCondition({
         where: {
           sellerId: req.params.id,

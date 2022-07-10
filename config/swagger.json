@@ -1,1265 +1,1289 @@
 {
-	"swagger": "2.0",
-	"info": {
-		"title": "SECOND HAND APPLICATION",
-		"version": "1.0",
-		"contact": {
-			"name": "Fadli-Devi-Aulia",
-			"url": "https://github.com/wly0601/fp-fsw-backend.git",
-			"email": "secondhand@gmail.com"
-		}
-	},
-	"tags": [{
-			"name": "Auth"
-		},
-		{
-			"name": "Products"
-		},
-		{
-			"name": "Transaction"
-		},
-		{
-			"name": "Upload"
-		},
-		{
-			"name": "City"
-		},
-		{
-			"name": "Category"
-		}
-	],
-	"consumes": [
-		"application/json"
-	],
-	"produces": [
-		"application/json"
-	],
-	"paths": {
-		"/api/login": {
-			"post": {
-				"summary": "Login",
-				"description": "Retrieve access tokens",
-				"operationId": "login",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreLoginResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "body",
-					"in": "body",
-					"required": true,
-					"schema": {
-						"$ref": "#/definitions/coreLoginRequest"
-					}
-				}],
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/register": {
-			"post": {
-				"summary": "Register",
-				"description": "Create new user",
-				"operationId": "register",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreRegisterResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "body",
-					"in": "body",
-					"required": true,
-					"schema": {
-						"$ref": "#/definitions/coreRegisterRequest"
-					}
-				}],
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/who-am-i": {
-			"get": {
-				"summary": "Who Am I",
-				"description": "Retrieve current user info",
-				"operationId": "whoami",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreWhoAmIResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/users/{id}/detail": {
-			"put": {
-				"summary": "Update User",
-				"description": "Change user information",
-				"operationId": "updateUser",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreUser"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"schema": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"type": "string"
-								},
-								"photo": {
-									"type": "string"
-								},
-								"phoneNumber": {
-									"type": "string"
-								},
-								"address": {
-									"type": "string"
-								},
-								"cityId": {
-									"type": "integer"
-								}
-							}
-						}
-					}
-				],
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/user/{id}": {
-			"get": {
-				"summary": "Get User data By Id",
-				"description": "Retrieve user data by Id",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreUser"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					}
-				],
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/users": {
-			"get": {
-				"summary": "Get All User",
-				"description": "Can Get User, But Can not Edit and Delete",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/definitions/coreUser"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"tags": [
-					"Auth"
-				]
-			}
-		},
-		"/api/transaction": {
-			"post": {
-				"summary": "Create Transaction",
-				"description": "Add new transaction on the database",
-				"operationId": "createTransaction",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreTransaction"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "body",
-					"in": "body",
-					"required": true,
-					"schema": {
-						"$ref": "#/definitions/coreCreateTransactionRequest"
-					}
-				}],
-				"tags": [
-					"Transaction"
-				]
-			}
-		},
-		"/api/buyer/{buyerId}/transaction": {
-			"get": {
-				"summary": "List Transaction Buyer on Seller that Logged in",
-				"description": "List Transaction Buyer On Specific Seller (That logged in)",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan"
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "buyerId",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Transaction"
-				]
-			}
-		},
-		"/api/transaction/{id}": {
-			"get": {
-				"summary": "Get Transaction By Id",
-				"description": "Get Transaction By Id ",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Transaction"
-				]
-			},
-			"put": {
-				"summary": "Update Transaction",
-				"description": "Update Transaction",
-				"operationId": "updateTransaction",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response."
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"schema": {
-							"type": "object",
-							"properties": {
-								"accBySeller": {
-									"type": "boolean"
-								}
-							}
-						}
-					}
-				],
-				"tags": [
-					"Transaction"
-				]
-			}
-		},
-		"/api/transaction/{id}/confirmation": {
-			"put": {
-				"summary": "Update Confirmation Seller",
-				"description": "Update Confirmation Seller to Cancel or SoldOut",
-				"operationId": "confirmationSeller",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response."
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"schema": {
-							"type": "object",
-							"properties": {
-								"isCanceled": {
-									"type": "boolean"
-								}
-							}
-						}
-					}
-				],
-				"tags": [
-					"Transaction"
-				]
-			}
-		},
-		"/api/user/{id}/notifications": {
-			"get": {
-				"summary": "Get Notification",
-				"description": "Can Get Notification",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan"
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Transaction"
-				]
-			}
-		},
-		"/api/user/picture/{id}/cloudinary": {
-			"put": {
-				"summary": "Upload",
-				"description": "Upload Photo/Image in Cloudinary",
-				"operationId": "uploadOnMemory",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"201": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/responseUpload"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "picture",
-						"in": "formData",
-						"required": true,
-						"type": "file"
-					}
-				],
-				"tags": [
-					"Upload"
-				]
-			}
-		},
-		"/api/product/picture/{id}/cloudinary": {
-			"put": {
-				"summary": "Upload",
-				"description": "Upload Photo Products in Cloudinary",
-				"operationId": "uploadOnMemory",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"201": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/responseUpload"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "picture",
-						"in": "formData",
-						"required": true,
-						"type": "file"
-					}
-				],
-				"tags": [
-					"Upload"
-				]
-			}
-		},
-		"/api/city/{id}": {
-			"get": {
-				"summary": "Get City",
-				"description": "Retrieve city by id",
-				"operationId": "getCity",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response."
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"City"
-				]
-			}
-		},
-		"/api/cities": {
-			"get": {
-				"summary": "Get Cities",
-				"description": "Can Get Cities, But Can not Edit and Delete",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/definitions/coreCity"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"tags": [
-					"City"
-				]
-			}
-		},
-		"/api/category/{id}": {
-			"get": {
-				"summary": "Get Category by Id",
-				"description": "Can Get Category, But Can not Edit and Delete",
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/definitions/coreCity"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Category"
-				]
-			}
-		},
-		"/api/categories": {
-			"get": {
-				"summary": "Get All Categories",
-				"description": "Can Get Cities, But Can not Edit and Delete",
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/definitions/coreCity"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"tags": [
-					"Category"
-				]
-			}
-		},
-		"/api/user/{id}/products": {
-			"get": {
-				"summary": "Get List Products that created by specific seller",
-				"description": "Get List Products that created by specific seller id",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "Berhasil ditampilkan",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/definitions/coreProduct"
-								}
-							}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Products"
-				]
-			}
-		},
-		"/api/products": {
-			"get": {
-				"summary": "List Products",
-				"description": "Retrieve list of products",
-				"operationId": "listCars",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreListProductsResponse"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "page",
-						"in": "query",
-						"required": false,
-						"type": "integer",
-						"format": "int32"
-					},
-					{
-						"name": "pageSize",
-						"in": "query",
-						"required": false,
-						"type": "integer",
-						"format": "int32"
-					},
-					{
-						"name": "category",
-						"in": "query",
-						"required": false,
-						"type": "string"
-					},
-					{
-						"name": "search",
-						"in": "query",
-						"required": false,
-						"type": "string"
-					}
-				],
-				"tags": [
-					"Products"
-				]
-			},
-			"post": {
-				"summary": "Create Product",
-				"description": "Add new product on the database",
-				"operationId": "createProducts",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreProduct"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "body",
-					"in": "body",
-					"required": true,
-					"schema": {
-						"$ref": "#/definitions/coreCreateProductRequest"
-					}
-				}],
-				"tags": [
-					"Products"
-				]
-			}
-		},
-		"/api/product/{id}": {
-			"get": {
-				"summary": "Get Product",
-				"description": "Retrieve product detail",
-				"operationId": "getProduct",
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreProduct"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Products"
-				]
-			},
-			"delete": {
-				"summary": "Delete Product",
-				"description": "Remove existing product by id",
-				"operationId": "deleteProduct",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"properties": {}
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-					"name": "id",
-					"in": "path",
-					"required": true,
-					"type": "integer",
-					"format": "int64"
-				}],
-				"tags": [
-					"Products"
-				]
-			},
-			"put": {
-				"summary": "Update Product",
-				"description": "Change product information",
-				"operationId": "updateProduct",
-				"security": [{
-					"BearerTokenAuth": []
-				}],
-				"responses": {
-					"200": {
-						"description": "A successful response.",
-						"schema": {
-							"$ref": "#/definitions/coreProduct"
-						}
-					},
-					"default": {
-						"description": "An unexpected error response.",
-						"schema": {
-							"$ref": "#/definitions/rpcStatus"
-						}
-					}
-				},
-				"parameters": [{
-						"name": "id",
-						"in": "path",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "body",
-						"in": "body",
-						"required": true,
-						"schema": {
-							"type": "object",
-							"properties": {
-								"name": {
-									"type": "string"
-								},
-								"price": {
-									"type": "integer"
-								},
-								"categoryId": {
-									"type": "integer"
-								},
-								"description": {
-									"type": "string"
-								},
-								"images": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									}
-								}
-							}
-						}
-					}
-				],
-				"tags": [
-					"Products"
-				]
-			}
-		}
-	},
-	"definitions": {
-		"ListProductsResponseMetaListProducts": {
-			"type": "object",
-			"properties": {
-				"pagination": {
-					"$ref": "#/definitions/MetaListProductsResponsePagination"
-				}
-			}
-		},
-		"MetaListProductsResponsePagination": {
-			"type": "object",
-			"properties": {
-				"page": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"pageSize": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"pageCount": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"count": {
-					"type": "integer",
-					"format": "int64"
-				}
-			}
-		},
-		"coreUser": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"name": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"encryptedPassword": {
-					"type": "string"
-				},
-				"photo": {
-					"type": "string"
-				},
-				"phoneNumber": {
-					"type": "string"
-				},
-				"address": {
-					"type": "string"
-				},
-				"cityId": {
-					"type": "integer"
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}
-		},
-		"coreProduct": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"name": {
-					"type": "string"
-				},
-				"price": {
-					"type": "integer"
-				},
-				"categoryId": {
-					"type": "integer"
-				},
-				"description": {
-					"type": "string"
-				},
-				"images": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}
-		},
-		"coreTransaction": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"productId": {
-					"type": "integer"
-				},
-				"buyerId": {
-					"type": "integer"
-				},
-				"bargainPrice": {
-					"type": "integer"
-				},
-				"dateOfBargain": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"accBySeller": {
-					"type": "boolean"
-				},
-				"dateOfAccOrNot": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}
-		},
-		"coreCreateTransactionRequest": {
-			"type": "object",
-			"properties": {
-				"productId": {
-					"type": "integer"
-				},
-				"bargainPrice": {
-					"type": "integer"
-				}
-			}
-		},
-		"coreCreateProductRequest": {
-			"type": "object",
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"price": {
-					"type": "integer"
-				},
-				"categoryId": {
-					"type": "integer"
-				},
-				"description": {
-					"type": "string"
-				},
-				"images": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				}
-			}
-		},
-		"coreListProductsResponse": {
-			"type": "object",
-			"properties": {
-				"meta": {
-					"$ref": "#/definitions/ListProductsResponseMetaListProducts"
-				},
-				"products": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/coreProduct"
-					}
-				}
-			}
-		},
-		"responseUpload": {
-			"type": "object",
-			"properties": {
-				"message": {
-					"type": "string"
-				},
-				"url": {
-					"type": "string"
-				}
-			}
-		},
-		"coreLoginRequest": {
-			"type": "object",
-			"properties": {
-				"email": {
-					"type": "string"
-				},
-				"password": {
-					"type": "string"
-				}
-			}
-		},
-		"coreLoginResponse": {
-			"type": "object",
-			"properties": {
-				"accessToken": {
-					"type": "string"
-				}
-			}
-		},
-		"coreRegisterRequest": {
-			"type": "object",
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"password": {
-					"type": "string"
-				}
-			}
-		},
-		"coreRegisterResponse": {
-			"type": "object",
-			"properties": {
-				"accessToken": {
-					"type": "string"
-				}
-			}
-		},
-		"coreUserProducts": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"productId": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"userId": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"rentStartedAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"rentEndedAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}
-		},
-		"coreWhoAmIResponse": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer",
-					"format": "int64"
-				},
-				"name": {
-					"type": "string"
-				},
-				"email": {
-					"type": "string"
-				},
-				"encryptedPassword": {
-					"type": "string"
-				},
-				"photo": {
-					"type": "string"
-				},
-				"phoneNumber": {
-					"type": "string"
-				},
-				"address": {
-					"type": "string"
-				},
-				"cityId": {
-					"type": "integer"
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "date-time"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "date-time"
-				}
-			}
-		},
-		"coreCity": {
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer"
-				},
-				"name": {
-					"type": "string"
-				}
-			}
-		},
-		"protobufAny": {
-			"type": "object",
-			"properties": {
-				"@type": {
-					"type": "string"
-				}
-			},
-			"additionalProperties": {}
-		},
-		"rpcStatus": {
-			"type": "object",
-			"properties": {
-				"code": {
-					"type": "integer",
-					"format": "int32"
-				},
-				"message": {
-					"type": "string"
-				},
-				"details": {
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/protobufAny"
-					}
-				}
-			}
-		}
-	},
-	"securityDefinitions": {
-		"BearerTokenAuth": {
-			"type": "apiKey",
-			"in": "header",
-			"name": "Authorization"
-		}
-	}
+  "swagger": "2.0",
+  "info": {
+    "title": "SECOND HAND APPLICATION",
+    "version": "1.0",
+    "contact": {
+      "name": "Fadli-Devi-Aulia",
+      "url": "https://github.com/wly0601/fp-fsw-backend.git",
+      "email": "secondhand@gmail.com"
+    }
+  },
+  "tags": [{
+      "name": "Auth"
+    },
+    {
+      "name": "Products"
+    },
+    {
+      "name": "Notification"
+    },
+    {
+      "name": "Transaction"
+    },
+    {
+      "name": "Upload"
+    },
+    {
+      "name": "City"
+    },
+    {
+      "name": "Category"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Retrieve access tokens",
+        "operationId": "login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/coreLoginRequest"
+          }
+        }],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Register",
+        "description": "Create new user",
+        "operationId": "register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreRegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/coreRegisterRequest"
+          }
+        }],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/who-am-i": {
+      "get": {
+        "summary": "Who Am I",
+        "description": "Retrieve current user info",
+        "operationId": "whoami",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreWhoAmIResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/users/{id}/detail": {
+      "put": {
+        "summary": "Update User",
+        "description": "Change user information",
+        "operationId": "updateUser",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "photo": {
+                  "type": "string"
+                },
+                "phoneNumber": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "cityId": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "summary": "Get User data By Id",
+        "description": "Retrieve user data by Id",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Get All User",
+        "description": "Can Get User, But Can not Edit and Delete",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreUser"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/transaction": {
+      "post": {
+        "summary": "Create Transaction",
+        "description": "Add new transaction on the database",
+        "operationId": "createTransaction",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreTransaction"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/coreCreateTransactionRequest"
+          }
+        }],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/buyer/{buyerId}/transaction": {
+      "get": {
+        "summary": "List Transaction Buyer on Seller that Logged in",
+        "description": "List Transaction Buyer On Specific Seller (That logged in)",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "buyerId",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/transaction/{id}": {
+      "get": {
+        "summary": "Get Transaction By Id",
+        "description": "Get Transaction By Id ",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Transaction"
+        ]
+      },
+      "put": {
+        "summary": "Update Transaction",
+        "description": "Update Transaction",
+        "operationId": "updateTransaction",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accBySeller": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/transaction/{id}/confirmation": {
+      "put": {
+        "summary": "Update Confirmation Seller",
+        "description": "Update Confirmation Seller to Cancel or SoldOut",
+        "operationId": "confirmationSeller",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "isCanceled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
+    "/api/user/{id}/notifications": {
+      "get": {
+        "summary": "Get Notification",
+        "description": "Can Get Notification",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Notification"
+        ]
+      }
+    },
+    "/api/user/picture/{id}/cloudinary": {
+      "put": {
+        "summary": "Upload",
+        "description": "Upload Photo/Image in Cloudinary",
+        "operationId": "uploadOnMemory",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "201": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/responseUpload"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "picture",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "tags": [
+          "Upload"
+        ]
+      }
+    },
+    "/api/product/picture/{id}/cloudinary": {
+      "put": {
+        "summary": "Upload",
+        "description": "Upload Photo Products in Cloudinary",
+        "operationId": "uploadOnMemory",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "201": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/responseUpload"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "picture",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "tags": [
+          "Upload"
+        ]
+      }
+    },
+    "/api/city/{id}": {
+      "get": {
+        "summary": "Get City",
+        "description": "Retrieve city by id",
+        "operationId": "getCity",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "City"
+        ]
+      }
+    },
+    "/api/cities": {
+      "get": {
+        "summary": "Get Cities",
+        "description": "Can Get Cities, But Can not Edit and Delete",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreCity"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "City"
+        ]
+      }
+    },
+    "/api/category/{id}": {
+      "get": {
+        "summary": "Get Category by Id",
+        "description": "Can Get Category, But Can not Edit and Delete",
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreCity"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Category"
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "summary": "Get All Categories",
+        "description": "Can Get Cities, But Can not Edit and Delete",
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreCity"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Category"
+        ]
+      }
+    },
+    "/api/user/{id}/products": {
+      "get": {
+        "summary": "Get List Products that created by specific seller",
+        "description": "Get List Products that created by specific seller id",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/coreProduct"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int32"
+        },
+        {
+          "name": "pageSize",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int32"
+        },
+        {
+          "name": "filterByStatusId",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int32"
+        }],
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/api/products": {
+      "get": {
+        "summary": "List Products",
+        "description": "Retrieve list of products",
+        "operationId": "listCars",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreListProductsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Products"
+        ]
+      },
+      "post": {
+        "summary": "Create Product",
+        "description": "Add new product on the database",
+        "operationId": "createProducts",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreProduct"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/coreCreateProductRequest"
+          }
+        }],
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/api/product/{id}": {
+      "get": {
+        "summary": "Get Product",
+        "description": "Retrieve product detail",
+        "operationId": "getProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreProduct"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Products"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Product",
+        "description": "Remove existing product by id",
+        "operationId": "deleteProduct",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
+        "tags": [
+          "Products"
+        ]
+      },
+      "put": {
+        "summary": "Update Product",
+        "description": "Change product information",
+        "operationId": "updateProduct",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/coreProduct"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [{
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "integer"
+                },
+                "categoryId": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Products"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ListProductsResponseMetaListProducts": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "$ref": "#/definitions/MetaListProductsResponsePagination"
+        }
+      }
+    },
+    "MetaListProductsResponsePagination": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pageCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "coreUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "encryptedPassword": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "cityId": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "coreProduct": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "categoryId": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "coreTransaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productId": {
+          "type": "integer"
+        },
+        "buyerId": {
+          "type": "integer"
+        },
+        "bargainPrice": {
+          "type": "integer"
+        },
+        "dateOfBargain": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "accBySeller": {
+          "type": "boolean"
+        },
+        "dateOfAccOrNot": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "coreCreateTransactionRequest": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "integer"
+        },
+        "bargainPrice": {
+          "type": "integer"
+        }
+      }
+    },
+    "coreCreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "categoryId": {
+          "type": "integer"
+        },
+        "description": {
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "coreListProductsResponse": {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/ListProductsResponseMetaListProducts"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/coreProduct"
+          }
+        }
+      }
+    },
+    "responseUpload": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "coreLoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "coreLoginResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        }
+      }
+    },
+    "coreRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "coreRegisterResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        }
+      }
+    },
+    "coreUserProducts": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "rentStartedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "rentEndedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "coreWhoAmIResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "encryptedPassword": {
+          "type": "string"
+        },
+        "photo": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "cityId": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "coreCity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BearerTokenAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  }
 }
