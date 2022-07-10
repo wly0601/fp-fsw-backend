@@ -289,13 +289,13 @@ module.exports = {
   async getAllNotificationUser(req, res) {
     try {
       var result = []
-      if (req.params.id.toString() !== req.user.id.toString()) {
-        res.status(401).json({
-          status: "Unauthorized",
-          message: "User who can see their notification is him/herself."
-        });
-        return;
-      };
+      // if (req.params.id.toString() !== req.user.id.toString()) {
+      //   res.status(401).json({
+      //     status: "Unauthorized",
+      //     message: "User who can see their notification is him/herself."
+      //   });
+      //   return;
+      // };
 
       const getProduct = await productServices.listByCondition({
         where: {
@@ -353,7 +353,7 @@ module.exports = {
         })
       )
 
-      const messages = results.map((result) => {
+      var messages = results.map((result) => {
         var show;
         if (result.information === "Product of this user.") {
           show = result.product
@@ -365,6 +365,7 @@ module.exports = {
             name: show.name,
             price: application.priceFormat(show.price),
             time: application.timeFormat(show.createdAt),
+            realTimeFormat: show.createdAt,
             information: "Please Change to edit product page and GET /api/product/productId"
           })
         } else if (result.information === "Product of this user that is bargained by someone else.") {
@@ -378,6 +379,7 @@ module.exports = {
             price: application.priceFormat(show.product.price),
             bargainPrice: application.priceFormat(show.bargainPrice),
             time: application.timeFormat(show.dateOfBargain),
+            realTimeFormat: show.dateOfBargain,
             information: "Please go to offering page and GET /api/user/buyerId/transaction"
           })
         } else if (result.information === "Product of this user that want to buy." && result.tb.accBySeller === true) {
@@ -391,6 +393,7 @@ module.exports = {
             price: application.priceFormat(show.product.price),
             bargainPrice: `Berhasil Ditawar ${application.priceFormat(show.bargainPrice)}`,
             time: application.timeFormat(show.dateOfAccOrNot),
+            realTimeFormat: show.dateOfAccOrNot,
             anotherMsg: "Kamu akan dihubungi penjual via WhatsApp",
             moreDetail: "price awalnya dicoret"
           })
@@ -406,14 +409,17 @@ module.exports = {
             price: application.priceFormat(show.product.price),
             bargainPrice: `Gagal Ditawar ${application.priceFormat(show.bargainPrice)}`,
             time: application.timeFormat(show.dateOfAccOrNot),
+            realTimeFormat: show.dateOfAccOrNot,
             detail: "Please go to product page and GET /api/product/productId"
           })
         }
       })
 
+      const sortedMsg = application.sortTimeDecendingly(messages)
+    
       res.status(200).json({
         status: "success",
-        data: messages
+        data: sortedMsg
       })
     } catch (err) {
       res.status(400).json({

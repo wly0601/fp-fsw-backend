@@ -48,6 +48,26 @@ module.exports = {
     return timeRender;
   },
 
+  sortTimeDecendingly(items){
+    if (items.length <= 1) {
+      return items;
+    }
+
+    var pivot = items[0].realTimeFormat;
+  
+    var left = []; 
+    var right = [];
+
+    for (var i = 1; i < items.length; i++) {
+      items[i].realTimeFormat > pivot ? left.push(items[i]) : right.push(items[i]);
+    }
+
+    return this.sortTimeDecendingly(left).concat(
+      items[0], 
+      this.sortTimeDecendingly(right)
+    );    
+  },
+
   getOffset(req,count){
     const { page = 1, pageSize = 16 } = req.query;
     const offset = (page - 1)*pageSize; 
