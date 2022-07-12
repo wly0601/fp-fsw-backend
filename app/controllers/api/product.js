@@ -1,6 +1,8 @@
 const productServices = require("../../services/product");
-const categoryServices = require("../../services/categories")
-const application = require("./application.js")
+const categoryServices = require("../../services/categories");
+const userServices = require("../../services/users");
+const application = require("./application.js");
+
 const {
   Categories,
   Users,
@@ -122,8 +124,22 @@ module.exports = {
       const { 
         filterByStatusId = 1, 
         page = 1, 
-        pageSize = 16
+        pageSize = 10
       } = req.query
+
+      const seller = await userServices.getOne({
+        where: {
+          id: req.params.id,
+        },
+        attributes: {
+          exclude: ["encryptedPassword"]
+        },
+        include: {
+          model: Cities,
+          as: "city",
+          attributes: ["name"]
+        }
+      });
 
       const products = await productServices.listByCondition({
         where: {
@@ -141,9 +157,14 @@ module.exports = {
         }
       })
 
-      const pagination = application.generatePagination(req, productCount);
+      const pagination = application.generatePagination(
+        req, 
+        'listSellerProduct', 
+        productCount
+      );
 
       res.status(200).json({
+        seller,
         products,
         meta: {
           pagination,
@@ -209,7 +230,7 @@ module.exports = {
     try {
       const { 
         page = 1, 
-        pageSize = 16
+        pageSize = 18
       } = req.query
 
       const query = await application.getQuery(req)
@@ -219,7 +240,11 @@ module.exports = {
         include: query.include
       })
 
-      const pagination = application.generatePagination(req, productCount);
+      const pagination = application.generatePagination(
+        req, 
+        'listProduct', 
+        productCount
+      );
 
       res.status(200).json({
         products,

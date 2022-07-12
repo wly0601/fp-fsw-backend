@@ -74,9 +74,18 @@ module.exports = {
     return offset;    
   },
 
-  generatePagination(req, count) {
+  generatePagination(req, from, count) {
+    var pageBefore, pageSizeBefore;
+    if(from === 'listProduct'){
+      pageBefore = 1;
+      pageSizeBefore = 18;
+    } else {
+      pageBefore = 1;
+      pageSizeBefore = 10;
+    }
+
     const {
-      page = 1, pageSize = 16
+      page = pageBefore, pageSize = pageSizeBefore
     } = req.query;
     const numberOfPage = Math.ceil(count / pageSize);
 
