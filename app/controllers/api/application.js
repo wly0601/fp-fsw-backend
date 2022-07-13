@@ -102,17 +102,24 @@ module.exports = {
     const comparison = [];
 
     for(let i = 0; i < querySearch.length; i++){
-      comparison.push({
-        name : {
-          [Op.iLike] : '% ' + querySearch[i], 
+      comparison.push(
+        {
+          name : {
+            [Op.iLike]: '%' + querySearch[i],
+          }
         },
-      });
+        {
+          name: {
+            [Op.iLike]: querySearch[i] + '%'
+          }
+        }
+      );
     }
 
     for(let i = 0; i < querySearch.length; i++){
       comparison.push({
         '$seller.city.name$' : {
-          [Op.iLike] : '% ' + querySearch[i], 
+          [Op.iLike] : '%' + querySearch[i] + '%', 
         },
       });
     } 
@@ -125,7 +132,7 @@ module.exports = {
       search
     } = req.query;
     const offset = this.getOffset(req)
-    const limit = req.query.pageSize || 16;
+    const limit = req.query.pageSize || 18;
     const order = [
       ["numberOfWishlist", "DESC"],
       ["price", "ASC"]
@@ -185,7 +192,7 @@ module.exports = {
       }
     }
 
-    console.log(getSearchResult)
+    // console.log(getSearchResult)
 
     const query = {
       where,      
@@ -197,5 +204,4 @@ module.exports = {
 
     return query
   },
-
 }
