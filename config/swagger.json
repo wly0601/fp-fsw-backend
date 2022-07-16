@@ -315,6 +315,26 @@
         ]
       }
     },
+    "/api/user/buyer/history-as-buyer": {
+      "get": {
+        "summary": "Get History Buyer",
+        "description": "Can get history transaction user as buyer",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "422": {
+            "description": "Uncompresable Entity"
+          }
+        },
+        "tags": [
+          "Transaction"
+        ]
+      }
+    },
     "/api/transaction/{id}": {
       "get": {
         "summary": "Get Transaction By Id",

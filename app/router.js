@@ -104,6 +104,11 @@ apiRouter.get("/api/buyer/:buyerId/transaction",
 	controllers.api.transaction.listTransactionBuyerOnSeller,
 )
 
+apiRouter.get("/api/user/buyer/history-as-buyer",
+	controllers.api.authentication.authorize,
+	controllers.api.transaction.historyAsBuyer,
+)
+
 apiRouter.get("/api/user/:id/notifications",
 	controllers.api.authentication.authorize,
 	controllers.api.transaction.getAllNotificationUser,

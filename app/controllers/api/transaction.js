@@ -18,8 +18,17 @@ module.exports = {
         bargainPrice,
         productId
       } = req.body
+
       const dateOfBargain = new Date()
       const product = await productServices.get(productId)
+
+      if(req.user.id === product.sellerId){
+        res.status(401).json({
+          status: "FAIL",
+          message: "Cannot bargain your own product!"
+        });
+        return;
+      }
 
       const transaction = await transactionServices.create({
         productId: product.id,
@@ -117,6 +126,82 @@ module.exports = {
           message: err.message,
         }
       });
+    }
+  },
+
+  async historyAsBuyer(req, res) {
+    try {
+      const historyBuyer = await transactionServices.listByCondition({
+        where: {
+          buyerId: req.user.id,
+        },
+        include: {
+          model: Products,
+          as: 'product',
+        },
+        order: [["id", "DESC"]]
+      });
+
+
+      const result = historyBuyer.map((transaction) => {
+        const tp = transaction.product;
+
+        if(transaction.isCanceled === true) {
+          return ({
+            msg: "Transaksi Dibatalkan Penjual",
+            name: tp.name,
+            productId: tp.id,
+            image: tp.images[0],
+            price: application.priceFormat(tp.price),
+            bargainPrice: `Ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+            time: application.timeFormat(transaction.dateOfBargain),
+          })                  
+        }
+
+        if(transaction.accBySeller === true){
+          return ({
+            msg: "Penawaran Produk",
+            name: tp.name,
+            productId: tp.id,
+            image: tp.images[0],
+            price: application.priceFormat(tp.price),
+            bargainPrice: `Berhasil ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+            time: application.timeFormat(transaction.dateOfAccOrNot),
+          })
+        } else if(transaction.accBySeller === false){
+          return ({
+            msg: "Penawaran Produk",
+            name: tp.name,
+            productId: tp.id,
+            image: tp.images[0],
+            price: application.priceFormat(tp.price),
+            bargainPrice: `Gagal ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+            time: application.timeFormat(transaction.dateOfAccOrNot),
+          })
+        } else {
+          return ({
+            msg: "Penawaran Produk",
+            name: tp.name,
+            productId: tp.id,
+            image: tp.images[0],
+            price: application.priceFormat(tp.price),
+            bargainPrice: `Ditawar ${application.priceFormat(transaction.bargainPrice)}`,
+            time: application.timeFormat(transaction.dateOfBargain),
+          })
+        }
+      });
+
+      res.status(200).json({
+        message: "Success",
+        result,
+      });
+    } catch (err) {
+      res.status(422).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      })
     }
   },
 
