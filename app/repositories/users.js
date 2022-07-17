@@ -1,4 +1,6 @@
-const { Users } = require("../models");
+const {
+	Users
+} = require("../models");
 
 module.exports = {
 	create(inputData) {

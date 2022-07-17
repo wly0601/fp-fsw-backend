@@ -1,45 +1,45 @@
 const productRepository = require("../repositories/product");
 
 module.exports = {
-	create(requestBody) {
-		return productRepository.create(requestBody);
-	},
+  create(requestBody) {
+    return productRepository.create(requestBody);
+  },
 
-	update(id, requestBody) {
-		return productRepository.update(id, requestBody);
-	},
+  update(id, requestBody) {
+    return productRepository.update(id, requestBody);
+  },
 
-	delete(id) {
-		return productRepository.delete(id);
-	},
+  delete(id) {
+    return productRepository.delete(id);
+  },
 
-	async listByCondition(request){
-		return productRepository.findAll(request);
-	},
+  async listByCondition(request) {
+    return productRepository.findAll(request);
+  },
 
-	async list() {
-		try {
-			const products = await productRepository.findAll();
-			const productCount = await productRepository.getTotalProducts();
+  async list() {
+    try {
+      const products = await productRepository.findAll();
+      const productCount = await productRepository.getTotalProducts();
 
-			return {
-					data: products,
-					count: productCount,
-				};
-			} catch (err) {
-				throw err;
-			}
-		},
+      return {
+        data: products,
+        count: productCount,
+      };
+    } catch (err) {
+      throw err;
+    }
+  },
 
-	get(id) {
-		return productRepository.find(id);
-	},
+  get(id) {
+    return productRepository.find(id);
+  },
 
-	getOne(key) {
-		return productRepository.findOne(key);
-	},
+  getOne(key) {
+    return productRepository.findOne(key);
+  },
 
-	total(request){
-		return productRepository.getTotalProducts(request)
-	}
+  total(request) {
+    return productRepository.getTotalProducts(request)
+  }
 };

@@ -205,13 +205,12 @@
           }
         },
         "parameters": [{
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "integer",
+          "format": "int64"
+        }],
         "tags": [
           "Auth"
         ]
@@ -713,33 +712,34 @@
           }
         },
         "parameters": [{
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "type": "integer",
-          "format": "int64"
-        },
-        {
-          "name": "page",
-          "in": "query",
-          "required": false,
-          "type": "integer",
-          "format": "int32"
-        },
-        {
-          "name": "pageSize",
-          "in": "query",
-          "required": false,
-          "type": "integer",
-          "format": "int32"
-        },
-        {
-          "name": "filterByStatusId",
-          "in": "query",
-          "required": false,
-          "type": "integer",
-          "format": "int32"
-        }],
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "filterByStatusId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
         "tags": [
           "Products"
         ]

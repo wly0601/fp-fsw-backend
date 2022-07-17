@@ -2,7 +2,7 @@ const cloudinary = require("../../../config/cloudinary");
 
 module.exports = {
 	uploadPhoto(req, res) {
-		if (req.user.id.toString() !== req.params.id.toString()){
+		if (req.user.id.toString() !== req.params.id.toString()) {
 			res.status(401).json({
 				status: "Unauthorized",
 				message: "User who can upload profile picture is him/herself."
@@ -27,8 +27,8 @@ module.exports = {
 		});
 	},
 
-  uploadProductImages(req, res) {
-		if (req.user.id.toString() !== req.params.id.toString()){
+	uploadProductImages(req, res) {
+		if (req.user.id.toString() !== req.params.id.toString()) {
 			res.status(401).json({
 				status: "Unauthorized",
 				message: "User who can upload photo product must be belongs to him/herself."

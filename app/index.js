@@ -3,12 +3,14 @@ const express = require("express")
 const cors = require("cors")
 const morgan = require("morgan");
 const router = require("./router");
-const { MORGAN_FORMAT } = require("../config/application")
+const {
+  MORGAN_FORMAT
+} = require("../config/application")
 const app = express();
 console.clear();
 
 const nodeEnv = process.env.NODE_ENV;
-if(!nodeEnv || nodeEnv !== "production"){
+if (!nodeEnv || nodeEnv !== "production") {
   app.use(morgan(MORGAN_FORMAT));
 }
 

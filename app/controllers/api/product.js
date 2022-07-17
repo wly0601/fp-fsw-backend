@@ -121,10 +121,10 @@ module.exports = {
 
   async listSellerProduct(req, res) {
     try {
-      const { 
-        filterByStatusId = 1, 
-        page = 1, 
-        pageSize = 10
+      const {
+        filterByStatusId = 1,
+          page = 1,
+          pageSize = 10
       } = req.query
 
       const seller = await userServices.getOne({
@@ -146,7 +146,7 @@ module.exports = {
           statusId: filterByStatusId,
           sellerId: req.params.id,
         },
-        offset: (page - 1)*pageSize,
+        offset: (page - 1) * pageSize,
         limit: pageSize
       });
 
@@ -158,8 +158,8 @@ module.exports = {
       })
 
       const pagination = application.generatePagination(
-        req, 
-        'listSellerProduct', 
+        req,
+        'listSellerProduct',
         productCount
       );
 
@@ -228,9 +228,9 @@ module.exports = {
 
   async getAllProducts(req, res) {
     try {
-      const { 
-        page = 1, 
-        pageSize = 18
+      const {
+        page = 1,
+          pageSize = 18
       } = req.query
 
       const query = await application.getQuery(req)
@@ -241,8 +241,8 @@ module.exports = {
       })
 
       const pagination = application.generatePagination(
-        req, 
-        'listProduct', 
+        req,
+        'listProduct',
         productCount
       );
 

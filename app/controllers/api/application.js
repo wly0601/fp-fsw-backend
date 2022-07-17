@@ -16,15 +16,17 @@ module.exports = {
     });
   },
 
-  getOffset(req,count){
-    const { page = 1, pageSize = 16 } = req.query;
-    const offset = (page - 1)*pageSize; 
-    return offset;    
+  getOffset(req, count) {
+    const {
+      page = 1, pageSize = 16
+    } = req.query;
+    const offset = (page - 1) * pageSize;
+    return offset;
   },
 
   generatePagination(req, from, count) {
     var pageBefore, pageSizeBefore;
-    if(from === 'listProduct'){
+    if (from === 'listProduct') {
       pageBefore = 1;
       pageSizeBefore = 18;
     } else {
@@ -45,32 +47,29 @@ module.exports = {
     }
   },
 
-  handleSearchQuery(req){
+  handleSearchQuery(req) {
     const querySearch = req.query.search.split(' ')
     const comparison = [];
 
-    for(let i = 0; i < querySearch.length; i++){
-      comparison.push(
-        {
-          name : {
-            [Op.iLike]: '%' + querySearch[i],
-          }
-        },
-        {
-          name: {
-            [Op.iLike]: querySearch[i] + '%'
-          }
+    for (let i = 0; i < querySearch.length; i++) {
+      comparison.push({
+        name: {
+          [Op.iLike]: '%' + querySearch[i],
         }
-      );
+      }, {
+        name: {
+          [Op.iLike]: querySearch[i] + '%'
+        }
+      });
     }
 
-    for(let i = 0; i < querySearch.length; i++){
+    for (let i = 0; i < querySearch.length; i++) {
       comparison.push({
-        '$seller.city.name$' : {
-          [Op.iLike] : '%' + querySearch[i] + '%', 
+        '$seller.city.name$': {
+          [Op.iLike]: '%' + querySearch[i] + '%',
         },
       });
-    } 
+    }
     return comparison
   },
 
@@ -94,8 +93,7 @@ module.exports = {
       statusId
     }
 
-    const include = [
-      {
+    const include = [{
         model: Categories,
         as: "category",
         attributes: ["name"]
@@ -116,34 +114,34 @@ module.exports = {
 
     if (category) {
       const getCategoryName = await categoryServices.getOne({
-        where : {
+        where: {
           name: {
-              [Op.iLike]: category
-            }
+            [Op.iLike]: category
           }
-        })
+        }
+      })
 
-      if(!!getCategoryName) {
+      if (!!getCategoryName) {
         where.categoryId = getCategoryName.id
       }
     }
 
     var getSearchResult;
-    if(!!search){
+    if (!!search) {
       getSearchResult = await this.handleSearchQuery(req);
     }
-    
-    if(!!getSearchResult){
+
+    if (!!getSearchResult) {
       where = {
         statusId,
-        [Op.or] : getSearchResult
+        [Op.or]: getSearchResult
       }
     }
 
     // console.log(getSearchResult)
 
     const query = {
-      where,      
+      where,
       include,
       offset,
       limit,

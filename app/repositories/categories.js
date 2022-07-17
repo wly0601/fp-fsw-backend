@@ -1,19 +1,21 @@
-const { Categories } = require("../models");
+const {
+  Categories
+} = require("../models");
 
 module.exports = {
-	find(id) {
-		return Categories.findByPk(id);
-	},
+  find(id) {
+    return Categories.findByPk(id);
+  },
 
-	findAll() {
-		return Categories.findAll();
-	},
+  findAll() {
+    return Categories.findAll();
+  },
 
-	findOne(key) {
-		return Categories.findOne(key);
-	},
+  findOne(key) {
+    return Categories.findOne(key);
+  },
 
-	getTotalCategories() {
-		return Categories.count();
-	},
+  getTotalCategories() {
+    return Categories.count();
+  },
 };

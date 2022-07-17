@@ -1,6 +1,12 @@
 const userServices = require("../../services/users");
-const { Cities } = require("../../models")
-const { checkPassword, createToken, hashPassword } = require("../../plugin");
+const {
+  Cities
+} = require("../../models")
+const {
+  checkPassword,
+  createToken,
+  hashPassword
+} = require("../../plugin");
 
 module.exports = {
   async register(req, res) {

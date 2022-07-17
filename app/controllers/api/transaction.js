@@ -1,6 +1,9 @@
 const transactionServices = require("../../services/transaction");
 const productServices = require("../../services/product");
-const { priceFormat, timeFormat } = require("../../utils");
+const {
+  priceFormat,
+  timeFormat
+} = require("../../utils");
 const userServices = require("../../services/users");
 
 const {
@@ -22,7 +25,7 @@ module.exports = {
       const dateOfBargain = new Date()
       const product = await productServices.get(productId)
 
-      if(req.user.id === product.sellerId){
+      if (req.user.id === product.sellerId) {
         res.status(401).json({
           status: "FAIL",
           message: "Cannot bargain your own product!"
@@ -139,14 +142,16 @@ module.exports = {
           model: Products,
           as: 'product',
         },
-        order: [["id", "DESC"]]
+        order: [
+          ["id", "DESC"]
+        ]
       });
 
 
       const result = historyBuyer.map((transaction) => {
         const tp = transaction.product;
 
-        if(transaction.isCanceled === true) {
+        if (transaction.isCanceled === true) {
           return ({
             msg: "Transaksi Dibatalkan Penjual",
             name: tp.name,
@@ -155,10 +160,10 @@ module.exports = {
             price: priceFormat(tp.price),
             bargainPrice: `Ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfBargain),
-          })                  
+          })
         }
 
-        if(transaction.accBySeller === true){
+        if (transaction.accBySeller === true) {
           return ({
             msg: "Penawaran Produk",
             name: tp.name,
@@ -168,7 +173,7 @@ module.exports = {
             bargainPrice: `Berhasil ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfAccOrNot),
           })
-        } else if(transaction.accBySeller === false){
+        } else if (transaction.accBySeller === false) {
           return ({
             msg: "Penawaran Produk",
             name: tp.name,

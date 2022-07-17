@@ -8,12 +8,12 @@ module.exports = {
 
 			return {
 				data: cities,
-					count: citiesCount,
-				};
-			} catch (err) {
-				throw err;
-			}
-		},
+				count: citiesCount,
+			};
+		} catch (err) {
+			throw err;
+		}
+	},
 
 	get(id) {
 		return citiesRepository.find(id);

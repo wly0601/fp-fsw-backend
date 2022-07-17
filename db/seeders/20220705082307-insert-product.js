@@ -1,13 +1,12 @@
 'use strict';
 
-function randomPrice(deviation, multiple){
-	return deviation*(Math.floor(2*Math.random()*multiple) - multiple)
+function randomPrice(deviation, multiple) {
+	return deviation * (Math.floor(2 * Math.random() * multiple) - multiple)
 };
 
 module.exports = {
-	async up (queryInterface, Sequelize) {
-		const products = [
-			{
+	async up(queryInterface, Sequelize) {
+		const products = [{
 				name: "Jam Tangan Casio",
 				categoryId: 14,
 				basePrice: 400000,
@@ -46,14 +45,14 @@ module.exports = {
 
 		const users = new Array(8)
 		for (let i = 0; i < users.length; i++) {
-			users[i] = i+1;
+			users[i] = i + 1;
 		}
 
 		const insertProducts = [];
 		products.forEach((product) => {
 			insertProducts.push(
 				...users.map((user, index) => {
-					const getTwoDigits = Math.random().toString().substring(6,8);
+					const getTwoDigits = Math.random().toString().substring(6, 8);
 					const deviationPrice = randomPrice(product.deviationPrice, product.multiple)
 					return ({
 						name: product.name,
@@ -68,9 +67,9 @@ module.exports = {
 							`https://picsum.photos/id/2${getTwoDigits}/600`
 						],
 						statusId: 1,
-						numberOfWishlist: Math.floor(Math.random()*5),
+						numberOfWishlist: Math.floor(Math.random() * 5),
 						createdAt: new Date(),
-						updatedAt: new Date(),  						
+						updatedAt: new Date(),
 					})
 				})
 			)
@@ -79,7 +78,7 @@ module.exports = {
 		await queryInterface.bulkInsert('Products', insertProducts, {})
 	},
 
-	async down (queryInterface, Sequelize) {
+	async down(queryInterface, Sequelize) {
 		await queryInterface.bulkDelete('Products', null, {});
 	}
 };

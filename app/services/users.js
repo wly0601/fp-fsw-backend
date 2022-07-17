@@ -20,12 +20,12 @@ module.exports = {
 
 			return {
 				data: users,
-					count: usersCount,
-				};
-			} catch (err) {
-				throw err;
-			}
-		},
+				count: usersCount,
+			};
+		} catch (err) {
+			throw err;
+		}
+	},
 
 	get(id) {
 		return usersRepository.find(id);

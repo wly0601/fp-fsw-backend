@@ -2,7 +2,7 @@ const userServices = require("../services/users");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-	async authorize(req, res, next) {
+  async authorize(req, res, next) {
     try {
       if (!req.headers.authorization) {
         res.status(401).json({

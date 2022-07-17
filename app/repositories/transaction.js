@@ -1,4 +1,6 @@
-const { TransactionHistory } = require("../models");
+const {
+	TransactionHistory
+} = require("../models");
 
 module.exports = {
 	create(inputData) {

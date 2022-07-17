@@ -9,7 +9,7 @@ module.exports = {
 		return transactionRepository.update(id, requestBody);
 	},
 
-	async listByCondition(request){
+	async listByCondition(request) {
 		return transactionRepository.findAll(request);
 	},
 
@@ -19,13 +19,13 @@ module.exports = {
 			const transactionCount = await transactionRepository.getTotalTransactions();
 
 			return {
-					data: transactions,
-					count: transactionCount,
-				};
-			} catch (err) {
-				throw err;
-			}
-		},
+				data: transactions,
+				count: transactionCount,
+			};
+		} catch (err) {
+			throw err;
+		}
+	},
 
 	get(id) {
 		return transactionRepository.find(id);
