@@ -1,6 +1,4 @@
-const {
-	Products
-} = require("../models");
+const { Products } = require("../models");
 
 module.exports = {
 	create(inputData) {

@@ -6,9 +6,9 @@ function timeFormat(date) {
     minutes = date.getMinutes();
   }
 
-  const timeRender = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}, ${date.getHours()}:${minutes}`
+  const timeRender = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}, ${date.getHours()}:${minutes}`;
 
   return timeRender;
-};
+}
 
 module.exports = timeFormat;

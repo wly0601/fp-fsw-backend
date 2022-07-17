@@ -1,7 +1,5 @@
 const userServices = require("../../services/users");
-const {
-  Cities
-} = require("../../models")
+const { Cities } = require("../../models");
 const {
   checkPassword,
   createToken,
@@ -11,7 +9,7 @@ const {
 module.exports = {
   async register(req, res) {
     try {
-      const password = req.body.password
+      const password = req.body.password;
       const encryptedPassword = await hashPassword(password, 10);
 
       const user = await userServices.create({
@@ -51,10 +49,10 @@ module.exports = {
           status: "Failed",
           message: "Email not found!"
         });
-        return
+        return;
       }
 
-      const isPasswordCorrect = await checkPassword(password, user.encryptedPassword)
+      const isPasswordCorrect = await checkPassword(password, user.encryptedPassword);
 
       if (!isPasswordCorrect) {
         res.status(401).json({
@@ -96,7 +94,7 @@ module.exports = {
         phoneNumber,
         address,
         cityId
-      } = req.body
+      } = req.body;
       const id = req.params.id;
       const compareId = id.toString() === req.user.id.toString();
       if (!compareId) {
@@ -112,7 +110,7 @@ module.exports = {
         phoneNumber,
         address,
         cityId,
-      })
+      });
       res.status(200).json({
         status: "OK",
         message: `User with id ${req.params.id} has been updated.`,
@@ -151,14 +149,14 @@ module.exports = {
         attributes: {
           exclude: ["encryptedPassword"]
         }
-      })
+      });
 
       if (!user) {
         res.status(404).json({
           status: "FAIL",
           message: `User with id ${req.params.id} not found!`,
         });
-        return
+        return;
       }
 
       res.status(200).json(user);
@@ -177,12 +175,12 @@ module.exports = {
       res.status(200).json({
         status: "success",
         data: getAll
-      })
+      });
     } catch (err) {
       res.status(400).json({
         status: "FAIL",
         message: err.message
-      })
+      });
     }
   },
 };

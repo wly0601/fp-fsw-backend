@@ -6,8 +6,8 @@ module.exports = {
 			res.status(401).json({
 				status: "Unauthorized",
 				message: "User who can upload profile picture is him/herself."
-			})
-			return
+			});
+			return;
 		}
 		const fileBase64 = req.file.buffer.toString("base64");
 		const file = `data:${req.file.mimetype};base64,${fileBase64}`;
@@ -32,8 +32,8 @@ module.exports = {
 			res.status(401).json({
 				status: "Unauthorized",
 				message: "User who can upload photo product must be belongs to him/herself."
-			})
-			return
+			});
+			return;
 		}
 		const fileBase64 = req.file.buffer.toString("base64");
 		const file = `data:${req.file.mimetype};base64,${fileBase64}`;
@@ -52,4 +52,4 @@ module.exports = {
 			});
 		});
 	}
-}
+};

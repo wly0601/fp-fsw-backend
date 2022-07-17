@@ -1,13 +1,9 @@
 'use strict';
 
-const {
-  Op
-} = require("sequelize");
+const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
-const {
-  Cities
-} = require("../../app/models");
-const data = require("../../data/indonesia-cities.json")
+const { Cities } = require("../../app/models");
+const data = require("../../data/indonesia-cities.json");
 
 const names = [
   "Ahmad Yuneda Alfajr",
@@ -32,7 +28,7 @@ const names = [
   "Tubagus Muhammad Eza Rizqi",
   "Wahyu Priyo Atmaja",
   "Yudha Gana Prasetyo Wibowo"
-]
+];
 
 function getRandAlphabet(args) {
   const getRandInt = Math.floor(Math.random() * 26);
@@ -44,7 +40,7 @@ function getRandTwoDigits(args) {
   if (getRandInt[0] === '0' && getRandInt[1] !== '0') {
     getRandInt = getRandInt[1];
   } else if (getRandInt[0] === '0' && getRandInt[1] === '0') {
-    getRandInt = '1'
+    getRandInt = '1';
   }
   return getRandInt;
 }
@@ -61,11 +57,11 @@ function getRandCity(args) {
     "Kota Surabaya",
     "Kota Yogyakarta"
   ];
-  const getCity = cities[Math.floor(Math.random() * cities.length)]
+  const getCity = cities[Math.floor(Math.random() * cities.length)];
 
   const find = data.find((element) =>
     element.city === getCity
-  )
+  );
 
   return find;
 }
@@ -94,10 +90,10 @@ module.exports = {
         cityId: randCity.id,
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
-    })
+      });
+    });
 
-    await queryInterface.bulkInsert('Users', users, {})
+    await queryInterface.bulkInsert('Users', users, {});
   },
 
   async down(queryInterface, Sequelize) {

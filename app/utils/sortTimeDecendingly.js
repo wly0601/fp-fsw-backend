@@ -16,6 +16,6 @@ function sortTimeDecendingly(items) {
     items[0],
     sortTimeDecendingly(right)
   );
-};
+}
 
 module.exports = sortTimeDecendingly;

@@ -1,8 +1,8 @@
 'use strict';
 
 function randomPrice(deviation, multiple) {
-	return deviation * (Math.floor(2 * Math.random() * multiple) - multiple)
-};
+	return deviation * (Math.floor(2 * Math.random() * multiple) - multiple);
+}
 
 module.exports = {
 	async up(queryInterface, Sequelize) {
@@ -43,7 +43,7 @@ module.exports = {
 			}
 		];
 
-		const users = new Array(8)
+		const users = new Array(8);
 		for (let i = 0; i < users.length; i++) {
 			users[i] = i + 1;
 		}
@@ -53,7 +53,7 @@ module.exports = {
 			insertProducts.push(
 				...users.map((user, index) => {
 					const getTwoDigits = Math.random().toString().substring(6, 8);
-					const deviationPrice = randomPrice(product.deviationPrice, product.multiple)
+					const deviationPrice = randomPrice(product.deviationPrice, product.multiple);
 					return ({
 						name: product.name,
 						sellerId: index + 1,
@@ -70,12 +70,12 @@ module.exports = {
 						numberOfWishlist: Math.floor(Math.random() * 5),
 						createdAt: new Date(),
 						updatedAt: new Date(),
-					})
+					});
 				})
-			)
-		})
+			);
+		});
 
-		await queryInterface.bulkInsert('Products', insertProducts, {})
+		await queryInterface.bulkInsert('Products', insertProducts, {});
 	},
 
 	async down(queryInterface, Sequelize) {

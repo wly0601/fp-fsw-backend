@@ -23,7 +23,7 @@ const categories = [
   "Souvenir & Pesta",
   "Buku & Alat Tulis",
   "Fotografi"
-]
+];
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -31,12 +31,12 @@ module.exports = {
       name: cat,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }))
+    }));
 
-    await queryInterface.bulkInsert('Categories', category, {})
+    await queryInterface.bulkInsert('Categories', category, {});
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Categories', null, {})
+    await queryInterface.bulkDelete('Categories', null, {});
   }
 };

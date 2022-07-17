@@ -1,18 +1,8 @@
 const transactionServices = require("../../services/transaction");
 const productServices = require("../../services/product");
-const {
-  priceFormat,
-  timeFormat
-} = require("../../utils");
+const { priceFormat,  timeFormat } = require("../../utils");
 const userServices = require("../../services/users");
-
-const {
-  Products,
-  Cities
-} = require("../../models")
-const {
-  Op
-} = require("sequelize");
+const { Products, Cities } = require("../../models");
 
 module.exports = {
   async createTransaction(req, res) {
@@ -20,10 +10,10 @@ module.exports = {
       const {
         bargainPrice,
         productId
-      } = req.body
+      } = req.body;
 
-      const dateOfBargain = new Date()
-      const product = await productServices.get(productId)
+      const dateOfBargain = new Date();
+      const product = await productServices.get(productId);
 
       if (req.user.id === product.sellerId) {
         res.status(401).json({
@@ -43,7 +33,7 @@ module.exports = {
       await productServices.update(productId, {
         statusId: 2,
         numberOfWishlist: product.numberOfWishlist + 1,
-      })
+      });
 
       res.status(201).json(transaction);
     } catch (err) {
@@ -58,14 +48,14 @@ module.exports = {
 
   async getTransactionById(req, res) {
     try {
-      const transaction = await transactionServices.get(req.params.id)
+      const transaction = await transactionServices.get(req.params.id);
 
       if (!transaction) {
         res.status(404).json({
           status: "FAIL",
           message: `Transaction with id ${req.params.id} not found!`,
         });
-        return
+        return;
       }
 
       res.status(200).json(transaction);
@@ -81,9 +71,7 @@ module.exports = {
 
   async listTransactionBuyerOnSeller(req, res) {
     try {
-      const {
-        buyerId,
-      } = req.params
+      const { buyerId, } = req.params;
 
       const getBuyerData = await userServices.getOne({
         where: {
@@ -97,7 +85,7 @@ module.exports = {
           as: "city",
           attributes: ["name"]
         }
-      })
+      });
 
       const getProductsByBuyer = await transactionServices.listByCondition({
         where: {
@@ -116,7 +104,7 @@ module.exports = {
             exclude: ["createdAt", "updatedAt"]
           },
         }]
-      })
+      });
 
       res.status(200).json({
         buyer: getBuyerData,
@@ -147,7 +135,6 @@ module.exports = {
         ]
       });
 
-
       const result = historyBuyer.map((transaction) => {
         const tp = transaction.product;
 
@@ -160,7 +147,7 @@ module.exports = {
             price: priceFormat(tp.price),
             bargainPrice: `Ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfBargain),
-          })
+          });
         }
 
         if (transaction.accBySeller === true) {
@@ -172,7 +159,7 @@ module.exports = {
             price: priceFormat(tp.price),
             bargainPrice: `Berhasil ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfAccOrNot),
-          })
+          });
         } else if (transaction.accBySeller === false) {
           return ({
             msg: "Penawaran Produk",
@@ -182,7 +169,7 @@ module.exports = {
             price: priceFormat(tp.price),
             bargainPrice: `Gagal ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfAccOrNot),
-          })
+          });
         } else {
           return ({
             msg: "Penawaran Produk",
@@ -192,7 +179,7 @@ module.exports = {
             price: priceFormat(tp.price),
             bargainPrice: `Ditawar ${priceFormat(transaction.bargainPrice)}`,
             time: timeFormat(transaction.dateOfBargain),
-          })
+          });
         }
       });
 
@@ -206,16 +193,14 @@ module.exports = {
           name: err.name,
           message: err.message,
         }
-      })
+      });
     }
   },
 
   async updateTransaction(req, res) {
     try {
-      const {
-        accBySeller
-      } = req.body
-      const dateOfAccOrNot = new Date()
+      const { accBySeller } = req.body;
+      const dateOfAccOrNot = new Date();
 
       const getTransactionId = await transactionServices.getOne({
         where: {
@@ -225,7 +210,7 @@ module.exports = {
           model: Products,
           as: "product"
         }
-      })
+      });
 
       if (getTransactionId.product.sellerId.toString() !== req.user.id.toString()) {
         res.status(401).json({
@@ -233,9 +218,9 @@ module.exports = {
           message: "Can't see other people transaction"
         });
         return;
-      };
+      }
 
-      const transaction = await transactionServices.get(req.params.id)
+      const transaction = await transactionServices.get(req.params.id);
       await transactionServices.update(req.params.id, {
         accBySeller,
         dateOfAccOrNot,
@@ -244,7 +229,7 @@ module.exports = {
       if (!accBySeller) {
         await productServices.update(transaction.productId, {
           statusId: 1,
-        })
+        });
       }
 
       res.status(201).json({
@@ -263,9 +248,7 @@ module.exports = {
 
   async confirmationSeller(req, res) {
     try {
-      const {
-        isCanceled
-      } = req.body
+      const { isCanceled } = req.body;
 
       const getTransactionId = await transactionServices.getOne({
         where: {
@@ -275,7 +258,7 @@ module.exports = {
           model: Products,
           as: "product"
         }
-      })
+      });
 
       if (getTransactionId.product.sellerId.toString() !== req.user.id.toString()) {
         res.status(401).json({
@@ -283,9 +266,9 @@ module.exports = {
           message: "Can't see other people transaction"
         });
         return;
-      };
+      }
 
-      const transaction = await transactionServices.get(req.params.id)
+      const transaction = await transactionServices.get(req.params.id);
       await transactionServices.update(req.params.id, {
         isCanceled,
       });
@@ -293,11 +276,11 @@ module.exports = {
       if (!isCanceled) {
         await productServices.update(transaction.productId, {
           statusId: 3,
-        })
+        });
       } else {
         await productServices.update(transaction.productId, {
           statusId: 1,
-        })
+        });
       }
 
       res.status(201).json({

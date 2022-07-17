@@ -14,9 +14,10 @@ module.exports = {
 	},
 
 	async list() {
+		// eslint-disable-next-line no-useless-catch
 		try {
 			const transactions = await transactionRepository.findAll();
-			const transactionCount = await transactionRepository.getTotalTransactions();
+			const transactionCount = await transactionRepository.getTotalTransaction();
 
 			return {
 				data: transactions,

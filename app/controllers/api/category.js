@@ -3,14 +3,14 @@ const categoryServices = require("../../services/categories");
 module.exports = {
   async getCategory(req, res) {
     try {
-      const category = await categoryServices.get(req.params.id)
+      const category = await categoryServices.get(req.params.id);
 
       if (!category) {
         res.status(404).json({
           status: "FAIL",
           message: `Category with id ${req.params.id} not found!`,
         });
-        return
+        return;
       }
 
       res.status(200).json(category);
@@ -31,12 +31,12 @@ module.exports = {
       res.status(200).json({
         status: "success",
         data: getAll
-      })
+      });
     } catch (err) {
       res.status(400).json({
         status: "FAIL",
         message: err.message
-      })
+      });
     }
   }
-}
+};

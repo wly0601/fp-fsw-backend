@@ -1,5 +1,5 @@
 'use strict';
-const indonesiaCities = require("../../data/indonesia-cities.json")
+const indonesiaCities = require("../../data/indonesia-cities.json");
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,9 +7,9 @@ module.exports = {
       name: city.city,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }))
+    }));
 
-    await queryInterface.bulkInsert('Cities', cities, {})
+    await queryInterface.bulkInsert('Cities', cities, {});
   },
 
   async down(queryInterface, Sequelize) {

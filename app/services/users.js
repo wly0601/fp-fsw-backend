@@ -14,6 +14,7 @@ module.exports = {
 	},
 
 	async list() {
+		// eslint-disable-next-line no-useless-catch
 		try {
 			const users = await usersRepository.findAll();
 			const usersCount = await usersRepository.getTotalUsers();

@@ -1,12 +1,10 @@
-const categoryServices = require("../../services/categories")
-const {
-  Op
-} = require("sequelize")
+const categoryServices = require("../../services/categories");
+const { Op } = require("sequelize");
 const {
   Categories,
   Cities,
   Users
-} = require("../../models")
+} = require("../../models");
 
 module.exports = {
   getRoot(req, res) {
@@ -17,9 +15,7 @@ module.exports = {
   },
 
   getOffset(req, count) {
-    const {
-      page = 1, pageSize = 16
-    } = req.query;
+    const { page = 1, pageSize = 16 } = req.query;
     const offset = (page - 1) * pageSize;
     return offset;
   },
@@ -34,9 +30,7 @@ module.exports = {
       pageSizeBefore = 10;
     }
 
-    const {
-      page = pageBefore, pageSize = pageSizeBefore
-    } = req.query;
+    const { page = pageBefore, pageSize = pageSizeBefore } = req.query;
     const numberOfPage = Math.ceil(count / pageSize);
 
     return {
@@ -44,11 +38,11 @@ module.exports = {
       numberOfPage,
       pageSize,
       count
-    }
+    };
   },
 
   handleSearchQuery(req) {
-    const querySearch = req.query.search.split(' ')
+    const querySearch = req.query.search.split(' ');
     const comparison = [];
 
     for (let i = 0; i < querySearch.length; i++) {
@@ -70,7 +64,7 @@ module.exports = {
         },
       });
     }
-    return comparison
+    return comparison;
   },
 
   async getQuery(req) {
@@ -78,20 +72,20 @@ module.exports = {
       category,
       search
     } = req.query;
-    const offset = this.getOffset(req)
+    const offset = this.getOffset(req);
     const limit = req.query.pageSize || 18;
     const order = [
       ["numberOfWishlist", "DESC"],
       ["price", "ASC"]
-    ]
+    ];
 
     const statusId = {
       [Op.ne]: 3
-    }
+    };
 
     var where = {
       statusId
-    }
+    };
 
     const include = [{
         model: Categories,
@@ -119,10 +113,10 @@ module.exports = {
             [Op.iLike]: category
           }
         }
-      })
+      });
 
       if (!!getCategoryName) {
-        where.categoryId = getCategoryName.id
+        where.categoryId = getCategoryName.id;
       }
     }
 
@@ -135,7 +129,7 @@ module.exports = {
       where = {
         statusId,
         [Op.or]: getSearchResult
-      }
+      };
     }
 
     // console.log(getSearchResult)
@@ -146,8 +140,8 @@ module.exports = {
       offset,
       limit,
       order
-    }
+    };
 
-    return query
+    return query;
   },
-}
+};

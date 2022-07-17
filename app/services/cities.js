@@ -2,6 +2,7 @@ const citiesRepository = require("../repositories/cities");
 
 module.exports = {
 	async list() {
+		// eslint-disable-next-line no-useless-catch
 		try {
 			const cities = await citiesRepository.findAll();
 			const citiesCount = await citiesRepository.getTotalCities();

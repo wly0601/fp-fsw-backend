@@ -7,10 +7,8 @@ const {
   Categories,
   Users,
   Cities
-} = require("../../models")
-const {
-  Op
-} = require("sequelize")
+} = require("../../models");
+const { Op } = require("sequelize");
 
 module.exports = {
   async createProduct(req, res) {
@@ -27,8 +25,8 @@ module.exports = {
         res.status(400).json({
           status: "FAIL",
           message: "Price must be float!"
-        })
-        return
+        });
+        return;
       }
 
       const product = await productServices.create({
@@ -68,7 +66,7 @@ module.exports = {
         where: {
           id,
         }
-      })
+      });
 
       if (!product) {
         res.status(404).json({
@@ -92,8 +90,8 @@ module.exports = {
         res.status(400).json({
           status: "FAIL",
           message: "Price must be float!"
-        })
-        return
+        });
+        return;
       }
 
       await productServices.update(req.params.id, {
@@ -125,7 +123,7 @@ module.exports = {
         filterByStatusId = 1,
           page = 1,
           pageSize = 10
-      } = req.query
+      } = req.query;
 
       const seller = await userServices.getOne({
         where: {
@@ -155,7 +153,7 @@ module.exports = {
           statusId: filterByStatusId,
           sellerId: req.params.id
         }
-      })
+      });
 
       const pagination = application.generatePagination(
         req,
@@ -169,7 +167,7 @@ module.exports = {
         meta: {
           pagination,
         }
-      })
+      });
 
     } catch (err) {
       res.status(400).json({
@@ -205,14 +203,14 @@ module.exports = {
             attributes: ["name"]
           }
         ]
-      })
+      });
 
       if (!product) {
         res.status(404).json({
           status: "FAIL",
           message: `Product with id ${req.params.id} not found!`,
         });
-        return
+        return;
       }
 
       res.status(200).json(product);
@@ -231,14 +229,14 @@ module.exports = {
       const {
         page = 1,
           pageSize = 18
-      } = req.query
+      } = req.query;
 
-      const query = await application.getQuery(req)
+      const query = await application.getQuery(req);
       const products = await productServices.listByCondition(query);
       const productCount = await productServices.total({
         where: query.where,
         include: query.include
-      })
+      });
 
       const pagination = application.generatePagination(
         req,
@@ -251,12 +249,12 @@ module.exports = {
         meta: {
           pagination,
         }
-      })
+      });
     } catch (err) {
       res.status(400).json({
         status: "FAIL",
         message: err.message
-      })
+      });
     }
   },
 
@@ -267,7 +265,7 @@ module.exports = {
         where: {
           id,
         }
-      })
+      });
 
       if (!product) {
         res.status(404).json({

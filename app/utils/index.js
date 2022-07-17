@@ -6,4 +6,4 @@ module.exports = {
     priceFormat,
     timeFormat,
     sortTimeDecendingly,
-}
+};

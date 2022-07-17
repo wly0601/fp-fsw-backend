@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "class-methods-use-this": ["error", {
+    "enforceForClassFields": false }],
+    "object-curly-spacing": ["error", "always"],
+    "object-curly-newline": ["error", {
+      "ObjectPattern": { "multiline": true },
+      "ExportDeclaration": { 
+        "multiline": true, 
+        "minProperties": 2 
+      }
+  }],
+    "linebreak-style": 0,
+    "no-extra-boolean-cast": "off",
+    "no-unused-vars": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off",
+    "no-undef": "off",
+    "semi": "error"
+  }
+}

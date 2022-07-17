@@ -1,5 +1,5 @@
+const { decodeToken } = require("../plugin");
 const userServices = require("../services/users");
-const jwt = require("jsonwebtoken");
 
 module.exports = {
   async authorize(req, res, next) {
@@ -9,11 +9,11 @@ module.exports = {
           status: "Failed",
           message: "Insert Token!"
         });
-        return
+        return;
       }
 
       const token = req.headers.authorization.split("Bearer ")[1];
-      const tokenPayload = jwt.verify(
+      const tokenPayload = decodeToken(
         token,
         process.env.JWT_PRIVATE_KEY || "Token"
       );
@@ -28,4 +28,4 @@ module.exports = {
       });
     }
   },
-}
+};

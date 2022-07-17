@@ -1,6 +1,4 @@
-const {
-	Cities
-} = require("../models");
+const { Cities } = require("../models");
 
 module.exports = {
 	find(id) {

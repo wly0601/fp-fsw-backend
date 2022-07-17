@@ -18,6 +18,7 @@ module.exports = {
   },
 
   async list() {
+    // eslint-disable-next-line no-useless-catch
     try {
       const products = await productRepository.findAll();
       const productCount = await productRepository.getTotalProducts();
@@ -40,6 +41,6 @@ module.exports = {
   },
 
   total(request) {
-    return productRepository.getTotalProducts(request)
+    return productRepository.getTotalProducts(request);
   }
 };

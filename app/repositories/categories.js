@@ -1,6 +1,4 @@
-const {
-  Categories
-} = require("../models");
+const { Categories } = require("../models");
 
 module.exports = {
   find(id) {

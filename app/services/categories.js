@@ -2,6 +2,7 @@ const categoryRepository = require("../repositories/categories");
 
 module.exports = {
 	async list() {
+		// eslint-disable-next-line no-useless-catch
 		try {
 			const categories = await categoryRepository.findAll();
 			const categoriesCount = await categoryRepository.getTotalCategories();
