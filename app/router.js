@@ -1,7 +1,7 @@
 const express = require("express");
 const controllers = require("./controllers");
 const middlewares = require("./middlewares");
-
+const uploadOnMemory = require("../config/uploadOnMemory");
 const apiRouter = express.Router();
 
 // configure and initialization swagger
@@ -25,7 +25,7 @@ apiRouter.post("/api/register",
 );
 
 apiRouter.get("/api/who-am-i",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.authentication.whoAmI,
 )
 
@@ -34,12 +34,12 @@ apiRouter.get("/api/user/:id",
 )
 
 apiRouter.get("/api/users",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.authentication.getAllUsers,
 )
 
 apiRouter.put("/api/users/:id/detail",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.authentication.updateDetail,
 )
 
@@ -49,12 +49,12 @@ apiRouter.put("/api/users/:id/detail",
  */
 
 apiRouter.post("/api/products",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.product.createProduct,
 )
 
 apiRouter.put("/api/product/:id",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.product.updateProduct,
 )
 
@@ -63,7 +63,7 @@ apiRouter.get("/api/product/:id",
 )
 
 apiRouter.get("/api/user/:id/products",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.product.listSellerProduct,
 )
 
@@ -72,7 +72,7 @@ apiRouter.get("/api/products",
 )
 
 apiRouter.delete("/api/product/:id",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.product.deleteProduct,
 )
 
@@ -80,38 +80,42 @@ apiRouter.delete("/api/product/:id",
  * Transaction History
  */
 apiRouter.post("/api/transaction",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.createTransaction,
 )
 
 apiRouter.get("/api/transaction/:id",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.getTransactionById,
 )
 
 apiRouter.put("/api/transaction/:id",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.updateTransaction,
 )
 
 apiRouter.put("/api/transaction/:id/confirmation",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.confirmationSeller,
 )
 
 apiRouter.get("/api/buyer/:buyerId/transaction",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.listTransactionBuyerOnSeller,
 )
 
 apiRouter.get("/api/user/buyer/history-as-buyer",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.transaction.historyAsBuyer,
 )
 
+/**
+ * Notofication Resources
+ */
+
 apiRouter.get("/api/user/:id/notifications",
-	controllers.api.authentication.authorize,
-	controllers.api.transaction.getAllNotificationUser,
+	middlewares.authorization.authorize,
+	controllers.api.notification.getAllNotificationUser,
 )
 
 /**
@@ -119,12 +123,12 @@ apiRouter.get("/api/user/:id/notifications",
  */
 
 apiRouter.get("/api/city/:id",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.cities.getCity,
 )
 
 apiRouter.get("/api/cities",
-	controllers.api.authentication.authorize,
+	middlewares.authorization.authorize,
 	controllers.api.cities.getAllCities,
 )
 
@@ -139,6 +143,23 @@ apiRouter.get("/api/category/:id",
 apiRouter.get("/api/categories",
 	controllers.api.category.getAllCategories,
 )
+
+/**
+ * Upload Resources
+ */
+ apiRouter.put(
+	"/api/user/picture/:id/cloudinary",
+  middlewares.authorization.authorize,
+  uploadOnMemory.single("picture"),
+	controllers.api.upload.uploadPhoto,
+);
+
+apiRouter.put(
+	"/api/product/picture/:id/cloudinary",
+	middlewares.authorization.authorize,
+	uploadOnMemory.single("picture"),
+	controllers.api.upload.uploadProductImages,
+);
 
 /**
  * API Documentation

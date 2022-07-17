@@ -40,7 +40,7 @@ module.exports = {
     });
 
     if (uniqueEmail) {
-      res.status(400).json({
+      res.status(409).json({
         status: 'failed',
         message: 'Email already taken!'
       })

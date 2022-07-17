@@ -16,58 +16,6 @@ module.exports = {
     });
   },
 
-  priceFormat(data) {
-    const priceStr = data.toString();
-    var i = priceStr.length;
-    var renderPrice = '';
-    var counter = 0;
-
-    while (i > 0) {
-      renderPrice = priceStr[i - 1] + renderPrice;
-      i--;
-      counter++;
-      if (counter == 3 && i !== 0) {
-        renderPrice = '.' + renderPrice;
-        counter = 0;
-      }
-    }
-
-    return `Rp ${renderPrice}`;
-  },
-
-  timeFormat(date) {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    if (date.getMinutes() < 10) {
-      var minutes = '0' + date.getMinutes().toString();
-    } else {
-      minutes = date.getMinutes();
-    }
-
-    const timeRender = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}, ${date.getHours()}:${minutes}`
-
-    return timeRender;
-  },
-
-  sortTimeDecendingly(items){
-    if (items.length <= 1) {
-      return items;
-    }
-
-    var pivot = items[0].realTimeFormat;
-  
-    var left = []; 
-    var right = [];
-
-    for (var i = 1; i < items.length; i++) {
-      items[i].realTimeFormat > pivot ? left.push(items[i]) : right.push(items[i]);
-    }
-
-    return this.sortTimeDecendingly(left).concat(
-      items[0], 
-      this.sortTimeDecendingly(right)
-    );    
-  },
-
   getOffset(req,count){
     const { page = 1, pageSize = 16 } = req.query;
     const offset = (page - 1)*pageSize; 

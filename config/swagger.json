@@ -76,17 +76,14 @@
         "description": "Create new user",
         "operationId": "register",
         "responses": {
-          "200": {
+          "201": {
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/coreRegisterResponse"
             }
           },
           "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
+            "description": "An unexpected error response."
           }
         },
         "parameters": [{
@@ -488,7 +485,7 @@
     },
     "/api/user/picture/{id}/cloudinary": {
       "put": {
-        "summary": "Upload",
+        "summary": "Upload Profile Photo",
         "description": "Upload Photo/Image in Cloudinary",
         "operationId": "uploadOnMemory",
         "security": [{
@@ -529,8 +526,8 @@
     },
     "/api/product/picture/{id}/cloudinary": {
       "put": {
-        "summary": "Upload",
-        "description": "Upload Photo Products in Cloudinary",
+        "summary": "Upload Product Image",
+        "description": "Upload Photo Product in Cloudinary",
         "operationId": "uploadOnMemory",
         "security": [{
           "BearerTokenAuth": []
@@ -1184,8 +1181,26 @@
     "coreRegisterResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
           "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "encryptedPassword": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

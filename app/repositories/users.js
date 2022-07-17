@@ -2,7 +2,6 @@ const { Users } = require("../models");
 
 module.exports = {
 	create(inputData) {
-		console.log(inputData)
 		return Users.create(inputData);
 	},
 
