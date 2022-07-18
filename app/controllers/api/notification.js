@@ -95,7 +95,7 @@ module.exports = {
             name: show.product.name,
             buyerId: show.buyerId,
             price: priceFormat(show.product.price),
-            bargainPrice: priceFormat(show.bargainPrice),
+            bargainPrice: `Ditawar ${priceFormat(show.bargainPrice)}`,
             time: timeFormat(show.dateOfBargain),
             realTimeFormat: show.dateOfBargain,
             information: "Please go to offering page and GET /api/user/buyerId/transaction"
