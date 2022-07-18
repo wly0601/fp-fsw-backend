@@ -229,7 +229,20 @@ module.exports = {
         }
       }
 
-      res.status(200).json({ product, markedByUser });
+      res.status(200).json({
+        id: product.id,
+        name: product.name,
+        sellerId: product.sellerId,
+        price: product.price,
+        categoryId: product.categoryId,
+        description: product.description,
+        images: product.images,
+        statusId: product.statusId,
+        numberOfWishlist: product.numberOfWishlist,
+        category: product.category,
+        seller: product.seller,
+        markedByUser,
+      });
     } catch (err) {
       res.status(400).json({
         error: {
