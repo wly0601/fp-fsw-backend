@@ -59,7 +59,7 @@ module.exports = {
           return;
         }
   
-        await wishServices.delete(userProduct.buyerId);
+        await wishServices.delete(userProduct.id);
         res.status(200).json({
           status: "OK",
           message: `Wishlist has been deleted.`,

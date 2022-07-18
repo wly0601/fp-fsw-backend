@@ -691,8 +691,8 @@
     },
     "/api/wishlist": {
       "post":{
-        "summary": "Create Wishlist",
-        "description": "Add new Marked product by user that already logged in.",
+        "summary": "Create or Delete Wishlist",
+        "description": "Add or Delete (depends on request body) of marked product by user that already logged in.",
         "security": [{
           "BearerTokenAuth": []
         }],
