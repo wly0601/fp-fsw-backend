@@ -19,6 +19,9 @@
       "name": "Notification"
     },
     {
+      "name": "Wishlist"
+    },
+    {
       "name": "Transaction"
     },
     {
@@ -686,6 +689,52 @@
         ]
       }
     },
+    "/api/wishlist": {
+      "post":{
+        "summary": "Create Wishlist",
+        "description": "Add new Marked product by user that already logged in.",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "default": {
+            "description": "An unexpected error response."
+          }
+        },
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/coreCreateWishlist"
+          }
+        }],
+        "tags": [
+          "Wishlist"
+        ]
+      },
+      "get":{
+        "summary": "Get All Wishlisted Product of User That Logged In",
+        "description": "This Endpoint has no request, just hit it!",
+        "security": [{
+          "BearerTokenAuth": []
+        }],
+        "responses": {
+          "200": {
+            "description": "Berhasil ditampilkan"
+          },
+          "default": {
+            "description": "An unexpected error response."
+          }
+        },
+        "tags": [
+          "Wishlist"
+        ]
+      }
+    },
     "/api/user/{id}/products": {
       "get": {
         "summary": "Get List Products that created by specific seller",
@@ -748,7 +797,7 @@
     "/api/products": {
       "get": {
         "summary": "List Products",
-        "description": "Retrieve list of products",
+        "description": "Retrieve list of products. \n Request query are unnecesary. Request query buyerId used to find information of wishlisted products of specific buyer",
         "operationId": "listCars",
         "responses": {
           "200": {
@@ -758,13 +807,18 @@
             }
           },
           "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
+            "description": "An unexpected error response."
           }
         },
-        "parameters": [{
+        "parameters": [
+          {
+            "name": "buyerId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
             "name": "page",
             "in": "query",
             "required": false,
@@ -832,7 +886,7 @@
     "/api/product/{id}": {
       "get": {
         "summary": "Get Product",
-        "description": "Retrieve product detail",
+        "description": "Retrieve product detail. \n Request query are unnecesary. Request query buyerId used to find information of wishlisted products of specific buyer",
         "operationId": "getProduct",
         "responses": {
           "200": {
@@ -848,13 +902,22 @@
             }
           }
         },
-        "parameters": [{
+        "parameters": [
+          {
+            "name": "buyerId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
           "name": "id",
           "in": "path",
           "required": true,
           "type": "integer",
           "format": "int64"
-        }],
+          }
+        ],
         "tags": [
           "Products"
         ]
@@ -1097,6 +1160,16 @@
         }
       }
     },
+    "coreCreateWishlist": {
+      "properties": {
+        "productId": {
+          "type": "integer"
+        },
+        "activeBtn": {
+          "type": "boolean"
+        }
+      }
+    },
     "coreCreateProductRequest": {
       "type": "object",
       "properties": {
@@ -1204,36 +1277,12 @@
         }
       }
     },
-    "coreUserProducts": {
+    "coreListProduct": {
       "type": "object",
       "properties": {
-        "id": {
+        "buyerId": {
           "type": "integer",
           "format": "int64"
-        },
-        "productId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "userId": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "rentStartedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "rentEndedAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "date-time"
         }
       }
     },

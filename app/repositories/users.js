@@ -25,8 +25,8 @@ module.exports = {
 		return Users.findByPk(id);
 	},
 
-	findAll() {
-		return Users.findAll();
+	findAll(condition) {
+		return Users.findAll(condition);
 	},
 
 	findOne(key) {

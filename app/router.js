@@ -13,7 +13,7 @@ apiRouter.get("/", controllers.api.application.getRoot);
 
 
 /**
- * Authentication Resources 
+ * @Authentication Resources 
  */
 apiRouter.post("/api/login",
   controllers.api.authentication.login
@@ -45,7 +45,7 @@ apiRouter.put("/api/users/:id/detail",
 
 
 /**
- * Product Resources
+ * @Product Resources
  */
 
 apiRouter.post("/api/products",
@@ -77,7 +77,7 @@ apiRouter.delete("/api/product/:id",
 );
 
 /**
- * Transaction History
+ * @Transaction History
  */
 apiRouter.post("/api/transaction",
   middlewares.authorization.authorize,
@@ -110,7 +110,7 @@ apiRouter.get("/api/user/buyer/history-as-buyer",
 );
 
 /**
- * Notofication Resources
+ * @Notification Resources
  */
 
 apiRouter.get("/api/user/:id/notifications",
@@ -119,7 +119,7 @@ apiRouter.get("/api/user/:id/notifications",
 );
 
 /**
- * City Resources
+ * @City Resources
  */
 
 apiRouter.get("/api/city/:id",
@@ -133,7 +133,7 @@ apiRouter.get("/api/cities",
 );
 
 /**
- * Category Resources
+ * @Category Resources
  */
 
 apiRouter.get("/api/category/:id",
@@ -145,7 +145,7 @@ apiRouter.get("/api/categories",
 );
 
 /**
- * Upload Resources
+ * @Upload Resources
  */
 apiRouter.put(
   "/api/user/picture/:id/cloudinary",
@@ -162,7 +162,21 @@ apiRouter.put(
 );
 
 /**
- * API Documentation
+ * @Wishlist Resources
+ */
+
+apiRouter.post("/api/wishlist",
+  middlewares.authorization.authorize,
+  controllers.api.wishlist.createOrDeleteWishlist,
+);
+
+apiRouter.get("/api/wishlist",
+  middlewares.authorization.authorize,
+  controllers.api.wishlist.listWishlists,
+);
+
+/**
+ * @API Documentation
  */
 
 apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));

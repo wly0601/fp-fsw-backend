@@ -170,7 +170,11 @@ module.exports = {
 
   async getAllUsers(req, res) {
     try {
-      const getAll = await userServices.list();
+      const getAll = await userServices.list({
+        attributes: {
+          exclude: ["encryptedPassword"]
+        }
+      });
 
       res.status(200).json({
         status: "success",

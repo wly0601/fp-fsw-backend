@@ -1,6 +1,6 @@
 const productServices = require("../../services/product");
-const categoryServices = require("../../services/categories");
 const userServices = require("../../services/users");
+const wishServices = require("../../services/wishlist");
 const application = require("./application.js");
 
 const {
@@ -181,6 +181,7 @@ module.exports = {
 
   async getProduct(req, res) {
     try {
+      const { buyerId = null } = req.query;
       const product = await productServices.getOne({
         where: {
           id: req.params.id
@@ -213,7 +214,22 @@ module.exports = {
         return;
       }
 
-      res.status(200).json(product);
+      var markedByUser = false;
+      if(!!buyerId) {
+        markedByUser = true;
+        const isMarked = await wishServices.getOne({
+          where: {
+            buyerId,
+            productId: product.id,
+          }
+        });
+
+        if(!isMarked) {
+          markedByUser = false;
+        }
+      }
+
+      res.status(200).json({ product, markedByUser });
     } catch (err) {
       res.status(400).json({
         error: {
@@ -228,11 +244,12 @@ module.exports = {
     try {
       const {
         page = 1,
-          pageSize = 18
+        pageSize = 18,
+        buyerId = null 
       } = req.query;
 
       const query = await application.getQuery(req);
-      const products = await productServices.listByCondition(query);
+      const getAll = await productServices.listByCondition(query);
       const productCount = await productServices.total({
         where: query.where,
         include: query.include
@@ -243,6 +260,35 @@ module.exports = {
         'listProduct',
         productCount
       );
+
+      const products = await Promise.all(getAll.map(async(product) => {
+        var markedByUser = false;
+        const isMarked = await wishServices.getOne({
+          where: {
+            buyerId,
+            productId: product.id,
+          }
+        });
+
+        if(!!buyerId && isMarked){
+          markedByUser = true;
+        }
+        
+        return ({
+          id: product.id,
+          name: product.name,
+          sellerId: product.sellerId,
+          price: product.price,
+          categoryId: product.categoryId,
+          description: product.description,
+          images: product.images,
+          statusId: product.statusId,
+          numberOfWishlist: product.numberOfWishlist,
+          category: product.category,
+          seller: product.seller,
+          markedByUser,
+        });
+      }));
 
       res.status(200).json({
         products,

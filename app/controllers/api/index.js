@@ -6,6 +6,7 @@ const category = require("./category");
 const transaction = require("./transaction");
 const notification = require("./notification");
 const upload = require("./upload");
+const wishlist = require("./wishlist");
 
 module.exports = {
   authentication,
@@ -15,5 +16,6 @@ module.exports = {
   category,
   transaction,
   notification,
-  upload
+  upload,
+  wishlist,
 };
