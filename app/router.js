@@ -182,4 +182,6 @@ apiRouter.get("/api/wishlist",
 apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
 apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
+apiRouter.use(controllers.api.application.handleNotFound);
+
 module.exports = apiRouter;

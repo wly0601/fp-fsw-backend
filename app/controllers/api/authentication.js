@@ -33,7 +33,7 @@ module.exports = {
     }
   },
 
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const email = req.body.email.toLowerCase();
       const password = req.body.password;
@@ -79,10 +79,7 @@ module.exports = {
         updatedAt: user.updatedAt,
       });
     } catch (err) {
-      res.status(401).json({
-        status: "Failed",
-        message: err.message
-      });
+      next(err);
     }
   },
 
@@ -170,7 +167,7 @@ module.exports = {
 
   async getAllUsers(req, res) {
     try {
-      const getAll = await userServices.list({
+      const getAll = await userServices.listByCondition({
         attributes: {
           exclude: ["encryptedPassword"]
         }

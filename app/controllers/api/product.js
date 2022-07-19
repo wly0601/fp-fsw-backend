@@ -186,7 +186,8 @@ module.exports = {
         where: {
           id: req.params.id
         },
-        include: [{
+        include: [
+          {
             model: Users,
             as: "seller",
             attributes: {

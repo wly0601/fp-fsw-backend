@@ -25,17 +25,21 @@ module.exports = {
         return product.id;
       });
 
-      const getTransactionSeller = await transactionServices.listByCondition({
-        where: {
-          productId: {
-            [Op.or]: getProductSeller
+      var getTransactionSeller = [];
+
+      if(getProductSeller.length !== 0){
+        getTransactionSeller = await transactionServices.listByCondition({
+          where: {
+            productId: {
+              [Op.or]: getProductSeller
+            }
+          },
+          include: {
+            model: Products,
+            as: "product"
           }
-        },
-        include: {
-          model: Products,
-          as: "product"
-        }
-      });
+        });
+      }
 
       const getTransactionBuyer = await transactionServices.listByCondition({
         where: {
