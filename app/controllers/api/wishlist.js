@@ -69,7 +69,7 @@ module.exports = {
     } catch (err) {
       res.status(400).json({
         error: {
-          name: err.name,
+          status: err.name,
           message: err.message,
         }
       });

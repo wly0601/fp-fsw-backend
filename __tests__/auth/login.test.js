@@ -57,6 +57,25 @@ describe('POST /api/login', () => {
       });
   });
 
+  it("Login new user, but format is wrong", async () => {    
+    return request(app)
+      .post("/api/login")
+      .set("Content-Type", "application/json")
+      .send({ 
+        email: undefined, 
+        password 
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            status: expect.any(String),
+            message: expect.any(String)
+          })
+        );
+      });
+  });
+
   it('Email is not registered, response should be 404', async () => {
     // Testing the email is not registered, 
     // Choose (for example) "typo version of createUser.email"

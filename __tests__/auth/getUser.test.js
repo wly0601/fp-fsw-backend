@@ -3,14 +3,14 @@ const app = require('../../app');
 const { Users } = require('../../app/models');
 const bcrypt = require("bcryptjs");
 
-var token;
+let token;
 
-describe('Who Am I', () => {
+describe('GET USER', () => {
   beforeAll(async () => {
     const password = "gaktausayang";
     await Users.create({
-      name: "Hu Tao",
-      email: "hutaocantik@gmail.com",
+      name: "Yae Miko",
+      email: "yaemiko@gmail.com",
       encryptedPassword: bcrypt.hashSync(password, 10),
     });
 
@@ -18,7 +18,7 @@ describe('Who Am I', () => {
       .post('/api/login')
       .set('Accept', 'application/json')
       .send({
-        email: "hutaocantik@gmail.com",
+        email: "yaemiko@gmail.com",
         password,
       })
       .then((res) => {
@@ -26,13 +26,16 @@ describe('Who Am I', () => {
       });
   });
 
-  it('Should response with status code 200', () => {
+  it('Should response with status code 200', async () => {
+    const getUser = await Users.findOne({
+      where: {
+        email: "yaemiko@gmail.com"
+      }
+    })
+
     return request(app)
-      .get('/api/who-am-i')
-      .set(
-        'Authorization',
-        `Bearer ${token}`,
-      )
+      .get(`/api/user/${getUser.id}`)
+      .set('Accept', 'application/json')
       .then((res) => {
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(
@@ -43,11 +46,12 @@ describe('Who Am I', () => {
       });
   });
 
-  it('Not have token, response should be 401', () => {
+  it('Get user, but the user not found', () => {
     return request(app)
-      .get('/api/who-am-i')
+      .get(`/api/user/-1`)
+      .set('Accept', 'application/json')
       .then((res) => {
-        expect(res.statusCode).toBe(401);
+        expect(res.statusCode).toBe(404);
         expect(res.body).toEqual(
           expect.objectContaining({
             ...res.body,
@@ -56,19 +60,17 @@ describe('Who Am I', () => {
       });
   });
 
-  it('Token is expired', async () => {
-
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsIm5hbWUiOiJIdSBUYW8iLCJlbWFpbCI6Imh1dGFvY2FudGlrQGdtYWlsLmNvbSIsImlhdCI6MTY1ODIzMDYzNSwiZXhwIjoxNjU4MjM0MjM1fQ.a1VwjQtJkcDNC21DHZ3yodXj1y0l7FbOtbkEOM1yerw";
+  it('Get all user', async () => {
 
     return request(app)
-      .get('/api/who-am-i')
+      .get('/api/users')
       .set('Accept', 'application/json')
       .set(
         'Authorization',
         `Bearer ${token}`,
       )
       .then((res) => {
-        expect(res.statusCode).toBe(401);
+        expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(
           expect.objectContaining({
             ...res.body,

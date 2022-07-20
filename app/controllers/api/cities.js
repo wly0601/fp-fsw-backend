@@ -6,16 +6,12 @@ module.exports = {
       const city = await citiesServices.get(req.params.id);
 
       if (!city) {
-        res.status(404).json({
-          status: "FAIL",
-          message: `City with id ${req.params.id} not found!`,
-        });
-        return;
+        throw new Error(`City with id ${req.params.id} not found!`) 
       }
 
       res.status(200).json(city);
     } catch (err) {
-      res.status(400).json({
+      res.status(404).json({
         error: {
           name: err.name,
           message: err.message,
@@ -25,18 +21,11 @@ module.exports = {
   },
 
   async getAllCities(req, res) {
-    try {
-      const getAll = await citiesServices.list();
+    const getAll = await citiesServices.list();
 
-      res.status(200).json({
-        status: "success",
-        data: getAll
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: "FAIL",
-        message: err.message
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: getAll
+    });
   }
 };

@@ -21,14 +21,6 @@ module.exports = {
         images
       } = req.body;
 
-      if (typeof price !== 'number') {
-        res.status(400).json({
-          status: "FAIL",
-          message: "Price must be float!"
-        });
-        return;
-      }
-
       const product = await productServices.create({
         name,
         sellerId: req.user.id,
@@ -42,7 +34,7 @@ module.exports = {
 
       res.status(201).json(product);
     } catch (err) {
-      res.status(422).json({
+      res.status(400).json({
         error: {
           name: err.name,
           message: err.message,
@@ -86,15 +78,7 @@ module.exports = {
         return;
       }
 
-      if (typeof price !== 'number') {
-        res.status(400).json({
-          status: "FAIL",
-          message: "Price must be float!"
-        });
-        return;
-      }
-
-      await productServices.update(req.params.id, {
+      const update = await productServices.update(req.params.id, {
         name,
         sellerId: req.user.id,
         price,
@@ -121,8 +105,8 @@ module.exports = {
     try {
       const {
         filterByStatusId = 1,
-          page = 1,
-          pageSize = 10
+        page = 1,
+        pageSize = 10
       } = req.query;
 
       const seller = await userServices.getOne({

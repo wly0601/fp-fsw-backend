@@ -14,18 +14,6 @@ describe("POST /api/register", () => {
     encryptedPassword: bcrypt.hashSync(password, 10)
   };
 
-  afterEach(async () => {
-    await Users.destroy({
-      where: {
-        [Op.or]: names.map((name) => {
-          return {
-            name:name,
-          };
-        })
-      },
-    });
-  });
-
   it("Register new user, not have any problem, response should be 201", async () => {
     //Generate random name from names[], then set it's email and password.
     const name = names[Math.floor(Math.random()*names.length)];
@@ -49,6 +37,27 @@ describe("POST /api/register", () => {
         );
       });
   });
+
+  it("Register new user, but format is wrong", async () => {    
+    return request(app)
+      .post("/api/register")
+      .set("Content-Type", "application/json")
+      .send({ 
+        name: "Aku siapa",
+        email: "siapahayo@gmail.com", 
+        password: ['i','l','o','v','e','y','o','u'],
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            status: expect.any(String),
+            message: expect.any(String)
+          })
+        );
+      });
+  });
+
 
   it("Register new user, but name is empty", async () => {
     //Generate random name from names[], then set it's email and password.
