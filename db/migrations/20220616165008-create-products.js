@@ -47,7 +47,7 @@ module.exports = {
           key: "id",
         },
       },
-      numberOfWhislist: {
+      numberOfWishlist: {
         type: Sequelize.INTEGER
       },
       createdAt: {

@@ -23,20 +23,20 @@ const categories = [
   "Souvenir & Pesta",
   "Buku & Alat Tulis",
   "Fotografi"
-]
+];
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     const category = categories.map((cat) => ({
       name: cat,
       createdAt: new Date(),
-      updatedAt: new Date(),      
-    }))
+      updatedAt: new Date(),
+    }));
 
-    await queryInterface.bulkInsert('Categories', category, {})
+    await queryInterface.bulkInsert('Categories', category, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Categories', null, {})
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('Categories', null, {});
   }
 };

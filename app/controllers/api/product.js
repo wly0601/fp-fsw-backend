@@ -1,191 +1,362 @@
 const productServices = require("../../services/product");
+const userServices = require("../../services/users");
+const wishServices = require("../../services/wishlist");
+const application = require("./application.js");
+
+const {
+  Categories,
+  Users,
+  Cities
+} = require("../../models");
+const { Op } = require("sequelize");
 
 module.exports = {
-	async createProduct(req, res) {
-		try {
-			const {
-				name,
-				price,
-				categoryId,
-				description,
-				images
-			} = req.body;
+  async createProduct(req, res) {
+    try {
+      const {
+        name,
+        price,
+        categoryId,
+        description,
+        images
+      } = req.body;
 
-			if (typeof price !== 'number') {
-				res.status(400).json({
-					status: "FAIL",
-					message: "Price must be float!"
-				})
-				return
-			}
+      if (typeof price !== 'number') {
+        res.status(400).json({
+          status: "FAIL",
+          message: "Price must be float!"
+        });
+        return;
+      }
 
-			const product = await productServices.create({
-				name,
-				sellerId: req.user.id,
-				price,
-				categoryId,
-				description,
-				images,
-				statusId: 1,
-				numberOfWhislist: 0,
-			});
+      const product = await productServices.create({
+        name,
+        sellerId: req.user.id,
+        price,
+        categoryId,
+        description,
+        images,
+        statusId: 1,
+        numberOfWishlist: 0,
+      });
 
-			res.status(201).json(product);
-		} catch (err) {
-			res.status(422).json({
-				error: {
-					name: err.name,
-					message: err.message,
-				}
-			});
-		}
-	},
+      res.status(201).json(product);
+    } catch (err) {
+      res.status(422).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
 
-	async updateProduct(req, res) {
-		try {
-			const {
-				name,
-				price,
-				categoryId,
-				description,
-				images
-			} = req.body;
+  async updateProduct(req, res) {
+    try {
+      const {
+        name,
+        price,
+        categoryId,
+        description,
+        images
+      } = req.body;
 
-			const id = req.params.id;
-			const product = await productServices.getOne({
-				where: {
-					id,
-				}
-			})
+      const id = req.params.id;
+      const product = await productServices.getOne({
+        where: {
+          id,
+        }
+      });
 
-			if (!product) {
-				res.status(404).json({
-					status: "FAIL",
-					message: `Product with id ${req.params.id} not found!`,
-				});
-				return;
-			}
+      if (!product) {
+        res.status(404).json({
+          status: "FAIL",
+          message: `Product with id ${req.params.id} not found!`,
+        });
+        return;
+      }
 
-			const compareSellerId = req.user.id === product.sellerId;
+      const compareSellerId = req.user.id === product.sellerId;
 
-			if (!compareSellerId) {
-				res.status(401).json({
-					status: "Unauthorized",
-					message: "User who can edit their product is him/herself."
-				});
-				return;
-			}
+      if (!compareSellerId) {
+        res.status(401).json({
+          status: "Unauthorized",
+          message: "User who can edit their product is him/herself."
+        });
+        return;
+      }
 
-			if (typeof price !== 'number') {
-				res.status(400).json({
-					status: "FAIL",
-					message: "Price must be float!"
-				})
-				return
-			}
+      if (typeof price !== 'number') {
+        res.status(400).json({
+          status: "FAIL",
+          message: "Price must be float!"
+        });
+        return;
+      }
 
-			await productServices.update(req.params.id, {
-				name,
-				sellerId: req.user.id,
-				price,
-				categoryId,
-				description,
-				images,
-			});
+      await productServices.update(req.params.id, {
+        name,
+        sellerId: req.user.id,
+        price,
+        categoryId,
+        description,
+        images,
+      });
 
-			res.status(201).json({
-				status: "Success",
-				message: `Product with id ${req.params.id} has been updated.`,
-			});
-		} catch (err) {
-			res.status(422).json({
-				error: {
-					name: err.name,
-					message: err.message,
-				}
-			});
-		}
-	},
+      res.status(201).json({
+        status: "Success",
+        message: `Product with id ${req.params.id} has been updated.`,
+      });
+    } catch (err) {
+      res.status(422).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
 
-	async getProduct(req, res) {
-		try {
-			const product = await productServices.get(req.params.id)
+  async listSellerProduct(req, res) {
+    try {
+      const {
+        filterByStatusId = 1,
+          page = 1,
+          pageSize = 10
+      } = req.query;
 
-			if (!product) {
-				res.status(404).json({
-					status: "FAIL",
-					message: `Product with id ${req.params.id} not found!`,
-				});
-				return
-			}
+      const seller = await userServices.getOne({
+        where: {
+          id: req.params.id,
+        },
+        attributes: {
+          exclude: ["encryptedPassword"]
+        },
+        include: {
+          model: Cities,
+          as: "city",
+          attributes: ["name"]
+        }
+      });
 
-			res.status(200).json(product);
-		} catch (err) {
-			res.status(400).json({
-				error: {
-					name: err.name,
-					message: err.message,
-				}
-			});
-		}
-	},
+      const products = await productServices.listByCondition({
+        where: {
+          statusId: filterByStatusId,
+          sellerId: req.params.id,
+        },
+        offset: (page - 1) * pageSize,
+        limit: pageSize
+      });
 
-	async getAllProducts(req, res) {
-		try {
-			const getAll = await productServices.list();
+      const productCount = await productServices.total({
+        where: {
+          statusId: filterByStatusId,
+          sellerId: req.params.id
+        }
+      });
 
-			res.status(200).json({
-				status: "success",
-				data: getAll
-			})
-		} catch (err) {
-			res.status(400).json({
-				status: "FAIL",
-				message: err.message
-			})
-		}
-	},
+      const pagination = application.generatePagination(
+        req,
+        'listSellerProduct',
+        productCount
+      );
 
-	async deleteProduct(req, res) {
-		try {
-			const id = req.params.id;
-			const product = await productServices.getOne({
-				where: {
-					id,
-				}
-			})
+      res.status(200).json({
+        seller,
+        products,
+        meta: {
+          pagination,
+        }
+      });
 
-			if (!product) {
-				res.status(404).json({
-					status: "FAIL",
-					message: `Product with id ${req.params.id} not found!`,
-				});
-				return;
-			}
+    } catch (err) {
+      res.status(400).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
 
-			const compareSellerId = req.user.id === product.sellerId;
+  async getProduct(req, res) {
+    try {
+      const { buyerId = null } = req.query;
+      const product = await productServices.getOne({
+        where: {
+          id: req.params.id
+        },
+        include: [{
+            model: Users,
+            as: "seller",
+            attributes: {
+              exclude: ["encryptedPassword"]
+            },
+            include: {
+              model: Cities,
+              as: "city",
+              attributes: ["name"]
+            }
+          },
+          {
+            model: Categories,
+            as: "category",
+            attributes: ["name"]
+          }
+        ]
+      });
 
-			if (!compareSellerId) {
-				res.status(401).json({
-					status: "Unauthorized.",
-					message: "User who can delete their product is him/herself."
-				});
-				return;
-			}
+      if (!product) {
+        res.status(404).json({
+          status: "FAIL",
+          message: `Product with id ${req.params.id} not found!`,
+        });
+        return;
+      }
 
-			await productServices.delete(req.params.id);
-			res.status(200).json({
-				status: "OK",
-				message: `Product with id ${req.params.id} has been deleted.`,
-			});
-		} catch (err) {
-			res.status(400).json({
-				error: {
-					name: err.name,
-					message: err.message,
-				}
-			});
-		}
-	},
+      var markedByUser = false;
+      if(!!buyerId) {
+        markedByUser = true;
+        const isMarked = await wishServices.getOne({
+          where: {
+            buyerId,
+            productId: product.id,
+          }
+        });
+
+        if(!isMarked) {
+          markedByUser = false;
+        }
+      }
+
+      res.status(200).json({
+        id: product.id,
+        name: product.name,
+        sellerId: product.sellerId,
+        price: product.price,
+        categoryId: product.categoryId,
+        description: product.description,
+        images: product.images,
+        statusId: product.statusId,
+        numberOfWishlist: product.numberOfWishlist,
+        category: product.category,
+        seller: product.seller,
+        markedByUser,
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
+
+  async getAllProducts(req, res) {
+    try {
+      const {
+        page = 1,
+        pageSize = 18,
+        buyerId = null 
+      } = req.query;
+
+      const query = await application.getQuery(req);
+      const getAll = await productServices.listByCondition(query);
+      const productCount = await productServices.total({
+        where: query.where,
+        include: query.include
+      });
+
+      const pagination = application.generatePagination(
+        req,
+        'listProduct',
+        productCount
+      );
+
+      const products = await Promise.all(getAll.map(async(product) => {
+        var markedByUser = false;
+        const isMarked = await wishServices.getOne({
+          where: {
+            buyerId,
+            productId: product.id,
+          }
+        });
+
+        if(!!buyerId && isMarked){
+          markedByUser = true;
+        }
+        
+        return ({
+          id: product.id,
+          name: product.name,
+          sellerId: product.sellerId,
+          price: product.price,
+          categoryId: product.categoryId,
+          description: product.description,
+          images: product.images,
+          statusId: product.statusId,
+          numberOfWishlist: product.numberOfWishlist,
+          category: product.category,
+          seller: product.seller,
+          markedByUser,
+        });
+      }));
+
+      res.status(200).json({
+        products,
+        meta: {
+          pagination,
+        }
+      });
+    } catch (err) {
+      res.status(400).json({
+        status: "FAIL",
+        message: err.message
+      });
+    }
+  },
+
+  async deleteProduct(req, res) {
+    try {
+      const id = req.params.id;
+      const product = await productServices.getOne({
+        where: {
+          id,
+        }
+      });
+
+      if (!product) {
+        res.status(404).json({
+          status: "FAIL",
+          message: `Product with id ${req.params.id} not found!`,
+        });
+        return;
+      }
+
+      const compareSellerId = req.user.id === product.sellerId;
+
+      if (!compareSellerId) {
+        res.status(401).json({
+          status: "Unauthorized.",
+          message: "User who can delete their product is him/herself."
+        });
+        return;
+      }
+
+      await productServices.delete(req.params.id);
+      res.status(200).json({
+        status: "OK",
+        message: `Product with id ${req.params.id} has been deleted.`,
+      });
+    } catch (err) {
+      res.status(400).json({
+        error: {
+          name: err.name,
+          message: err.message,
+        }
+      });
+    }
+  },
 
 };

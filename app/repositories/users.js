@@ -2,7 +2,6 @@ const { Users } = require("../models");
 
 module.exports = {
 	create(inputData) {
-		console.log(inputData)
 		return Users.create(inputData);
 	},
 
@@ -26,8 +25,8 @@ module.exports = {
 		return Users.findByPk(id);
 	},
 
-	findAll() {
-		return Users.findAll();
+	findAll(condition) {
+		return Users.findAll(condition);
 	},
 
 	findOne(key) {

@@ -1,7 +1,8 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  class TransactionHistory extends Model {
+  class userProduct extends Model {
     static associate(models) {
       this.belongsTo(models.Users, {
         foreignKey: "buyerId",
@@ -13,17 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  TransactionHistory.init({
-    productId: DataTypes.INTEGER,
+  userProduct.init({
     buyerId: DataTypes.INTEGER,
-    bargainPrice: DataTypes.INTEGER,
-    dateOfBargain: DataTypes.DATE,
-    accBySeller: DataTypes.BOOLEAN,
-    dateOfAccOrNot: DataTypes.DATE,
-    isCanceled: DataTypes.BOOLEAN
+    productId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'TransactionHistory',
+    modelName: 'userProduct',
   });
-  return TransactionHistory;
+  return userProduct;
 };

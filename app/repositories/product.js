@@ -25,15 +25,15 @@ module.exports = {
 		return Products.findByPk(id);
 	},
 
-	findAll() {
-		return Products.findAll();
+	findAll(request) {
+		return Products.findAll(request);
 	},
 
 	findOne(key) {
 		return Products.findOne(key);
 	},
 
-	getTotalProducts() {
-		return Products.count();
+	getTotalProducts(request) {
+		return Products.count(request);
 	},
 };

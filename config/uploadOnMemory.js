@@ -5,4 +5,6 @@ const path = require("path");
 const storage = multer.memoryStorage();
 
 // Membuat upload middleware
-module.exports = multer({ storage });
+module.exports = multer({
+    storage
+});
