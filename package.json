@@ -8,7 +8,13 @@
     "dev": "nodemon -q bin/www",
     "eslint": "eslint ./**/*.js",
     "eslint:fix": "eslint --fix ./**/*.js",
-    "test": "jest"
+    "test": "jest",
+    "test:root": "jest ./__tests__/rootUrl.test.js",
+    "test:auth": "jest ./__tests__/auth",
+    "test:product": "jest ./__tests__/product",
+    "test:wishlist": "jest ./__tests__/wishlist",
+    "test:category": "jest ./__tests__/category",
+    "test:city": "jest ./__tests__/city"
   },
   "author": "FadliDeviAulia",
   "license": "ISC",

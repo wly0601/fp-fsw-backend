@@ -113,7 +113,7 @@ apiRouter.get("/api/user/buyer/history-as-buyer",
  * @Notification Resources
  */
 
-apiRouter.get("/api/user/:id/notifications",
+apiRouter.get("/api/notifications",
   middlewares.authorization.authorize,
   controllers.api.notification.getAllNotificationUser,
 );

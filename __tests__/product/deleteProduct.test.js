@@ -4,26 +4,18 @@ const { Users, Products } = require('../../app/models');
 const bcrypt = require("bcryptjs");
 
 var token, user, product;
-describe("GET PRODUCT", () => {
+describe("DELETE PRODUCT", () => {
   beforeAll(async () => {
-    const password = "gaktausayang";
-    user = await Users.create({
-      name: "Hu Tao Lagi",
-      email: "hutaocantik@gmail.com",
-      encryptedPassword: bcrypt.hashSync(password, 10),
-    });
-
     await request(app)
       .post('/api/login')
       .set('Accept', 'application/json')
       .send({
-        email: "hutaocantik@gmail.com",
-        password,
+        email: "ahmadalfajr@gmail.com",
+        password: "12345678",
       })
       .then((res) => {
         token = res.body.token;
       });
-
     await request(app)
       .post("/api/products")
       .set("Content-Type", "application/json")
@@ -40,11 +32,12 @@ describe("GET PRODUCT", () => {
       })
   });
 
-  it("Get Product, not have any problem, response should be 200", async () => {    
+  it("Delete Product", async () => {    
     return request(app)
-      .get(`/api/product/${product.id}`)
+      .delete(`/api/product/${product.id}`)
       .set("Content-Type", "application/json")
-      .then((res) => {
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => { 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(
           expect.objectContaining({
@@ -54,11 +47,27 @@ describe("GET PRODUCT", () => {
       });
   });
 
-  it("Get Product, but not found", async () => {    
+  it("Delete Product", async () => {    
     return request(app)
-      .get(`/api/product/${(-1) * product.id}`)
+      .delete(`/api/product/2`)
       .set("Content-Type", "application/json")
-      .then((res) => {
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => { 
+        expect(res.statusCode).toBe(401);
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            ...res.body,
+          })
+        );
+      });
+  });
+
+  it("Delete Product", async () => {    
+    return request(app)
+      .delete(`/api/product/${(-1)*product.id}`)
+      .set("Content-Type", "application/json")
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => { 
         expect(res.statusCode).toBe(404);
         expect(res.body).toEqual(
           expect.objectContaining({
@@ -68,29 +77,13 @@ describe("GET PRODUCT", () => {
       });
   });
 
-  it("Get Product, but req params is wrong", async () => {    
+  it("Delete Product", async () => {    
     return request(app)
-      .get(`/api/product/1?buyerId=nomor-satu-untukku`)
+      .delete(`/api/product/paansih`)
       .set("Content-Type", "application/json")
-      .then((res) => {
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => { 
         expect(res.statusCode).toBe(400);
-        expect(res.body).toEqual(
-          expect.objectContaining({
-            error: {
-              name: expect.any(String),
-              message: expect.any(String),
-            }
-          })
-        );
-      });
-  });
-
-  it("Get Product, with bookmark", async () => {    
-    return request(app)
-      .get(`/api/product/1?buyerId=3`)
-      .set("Content-Type", "application/json")
-      .then((res) => {
-        expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(
           expect.objectContaining({
             ...res.body,

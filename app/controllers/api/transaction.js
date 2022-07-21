@@ -23,6 +23,14 @@ module.exports = {
         return;
       }
 
+      if (product.seller.accBySeller === null) {
+        res.status(409).json({
+          status: "Conflict",
+          message: "Cannot bargain again!"
+        });
+        return;      
+      }
+
       const transaction = await transactionServices.create({
         productId: product.id,
         buyerId: req.user.id,

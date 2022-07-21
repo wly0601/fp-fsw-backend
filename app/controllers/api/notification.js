@@ -7,17 +7,9 @@ const { Products } = require("../../models");
 module.exports = {
   async getAllNotificationUser(req, res) {
     try {
-      if (req.params.id.toString() !== req.user.id.toString()) {
-        res.status(401).json({
-          status: "Unauthorized",
-          message: "User who can see their notification is him/herself."
-        });
-        return;
-      }
-
       const getProduct = await productServices.listByCondition({
         where: {
-          sellerId: req.params.id,
+          sellerId: req.user.id,
         }
       });
 
@@ -43,7 +35,7 @@ module.exports = {
 
       const getTransactionBuyer = await transactionServices.listByCondition({
         where: {
-          buyerId: req.params.id,
+          buyerId: req.user.id,
           accBySeller: {
             [Op.or]: [true, false]
           }
