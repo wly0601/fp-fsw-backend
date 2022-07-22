@@ -2,7 +2,7 @@ const request = require('supertest');
 const fs = require('mz/fs');
 const app = require("../../app");
 const bcrypt = require("bcryptjs");
-const TIMEOUT_INTERVAL = 40000
+const TIMEOUT_INTERVAL = 40000;
 
 let testFilePath = null;
 let token;
@@ -33,8 +33,8 @@ describe('Upload file', () => {
             expect(res.message).toBe('Upload image berhasil');
           })
           .catch(err => console.log(err));
-      })
-  }, TIMEOUT_INTERVAL)
+      });
+  }, TIMEOUT_INTERVAL);
 
   it('Upload to CDN, but unauthorized.', () => {
     fs.exists(filePath)
@@ -51,12 +51,12 @@ describe('Upload file', () => {
                 message: "User who can upload profile picture is him/herself."
               })
             );
-          })
-      })
-  }, TIMEOUT_INTERVAL)
+          });
+      });
+  }, TIMEOUT_INTERVAL);
 
   it('Upload to CDN, but no file.', () => {
-    const noFile = `${__dirname}/docs/tests.jpg`
+    const noFile = `${__dirname}/docs/tests.jpg`;
     fs.exists(noFile)
       .then((exists) => {
         return request(app)
@@ -71,7 +71,7 @@ describe('Upload file', () => {
                 message: "Gagal upload file!",
               })
             );
-          })
-      })
-  }, TIMEOUT_INTERVAL)
-})
+          });
+      });
+  }, TIMEOUT_INTERVAL);
+});

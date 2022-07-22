@@ -9,7 +9,7 @@ describe("CREATE TRANSACTION", () => {
     await TransactionHistory.destroy({
       where: {},
       truncate: true,
-    })
+    });
 
     await request(app)
       .post('/api/login')
@@ -27,7 +27,7 @@ describe("CREATE TRANSACTION", () => {
       bargainPrice: 1000,
       buyerId: 1,
       dateOfBargain: new Date(),
-    })
+    });
   });
 
   it("Create Transaction", async () => {    

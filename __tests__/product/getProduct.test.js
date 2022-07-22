@@ -36,8 +36,8 @@ describe("GET PRODUCT", () => {
         images: ["gak ada"],
       })
       .then((res) => {
-        product = res.body
-      })
+        product = res.body;
+      });
   });
 
   it("Get Product, not have any problem, response should be 200", async () => {    

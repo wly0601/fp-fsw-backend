@@ -25,7 +25,7 @@ describe("LIST ALL WISHLIST", () => {
       .send({
         productId: 3,
         activeBtn: false
-      })
+      });
   });
 
   afterAll(async () => {
@@ -34,7 +34,7 @@ describe("LIST ALL WISHLIST", () => {
         productId: 3,
         buyerId: 1,
       }
-    })
+    });
   });
 
   it("Should get Wishlists, not have any problem", () => {    
@@ -49,6 +49,6 @@ describe("LIST ALL WISHLIST", () => {
             ...res.body,
           })
         );
-      })
+      });
   });
 });

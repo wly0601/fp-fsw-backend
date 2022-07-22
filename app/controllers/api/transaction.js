@@ -24,7 +24,7 @@ module.exports = {
           buyerId: req.user.id,
           accBySeller: null
         }
-      })
+      });
 
       if (req.user.id === product.sellerId) {
         res.status(401).json({

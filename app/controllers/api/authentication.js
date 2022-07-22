@@ -148,7 +148,7 @@ module.exports = {
       });
 
       if (!user) {
-        throw new Error(`User with id ${req.params.id} not found!`)
+        throw new Error(`User with id ${req.params.id} not found!`);
       }
 
       res.status(200).json(user);

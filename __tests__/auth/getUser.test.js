@@ -31,7 +31,7 @@ describe('GET USER', () => {
       where: {
         email: "yaemiko@gmail.com"
       }
-    })
+    });
 
     return request(app)
       .get(`/api/user/${getUser.id}`)

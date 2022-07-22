@@ -6,7 +6,7 @@ module.exports = {
       const city = await citiesServices.get(req.params.id);
 
       if (!city) {
-        throw new Error(`City with id ${req.params.id} not found!`) 
+        throw new Error(`City with id ${req.params.id} not found!`); 
       }
 
       res.status(200).json(city);

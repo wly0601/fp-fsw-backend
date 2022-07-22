@@ -32,7 +32,7 @@ describe('UPDATE USER', () => {
       where: {
         email: "keqingcantik@gmail.com"
       }
-    })
+    });
     return request(app)
       .put(`/api/users/${getUser.id}/detail`)
       .set('Accept', 'application/json')

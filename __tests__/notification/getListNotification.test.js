@@ -33,19 +33,19 @@ describe("LIST PRODUCT", () => {
 
   });
 
-  afterAll(async () => {
-    await TransactionHistory.destroy({
-      where: {
-        id: getThis.id
-      }
-    }); 
+  // afterAll(async () => {
+  //   await TransactionHistory.destroy({
+  //     where: {
+  //       id: getThis.id
+  //     }
+  //   }); 
 
-    await TransactionHistory.destroy({
-      where: {
-        id: getThis_2.id
-      }
-    }); 
-  });
+  //   await TransactionHistory.destroy({
+  //     where: {
+  //       id: getThis_2.id
+  //     }
+  //   }); 
+  // });
 
   it("Get Notification", async () => {    
     return request(app)

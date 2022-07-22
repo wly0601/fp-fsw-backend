@@ -28,8 +28,8 @@ describe("DELETE PRODUCT", () => {
         images: ["gak ada"],
       })
       .then((res) => {
-        product = res.body
-      })
+        product = res.body;
+      });
   });
 
   it("Delete Product", async () => {    

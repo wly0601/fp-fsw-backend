@@ -13,7 +13,7 @@ describe("UPDATE PRODUCT", () => {
       encryptedPassword: bcrypt.hashSync(password, 10),
     });
 
-    user_2: await Users.create({
+    await Users.create({
       name: "Yanfei",
       email: "yanfei@gmail.com",
       encryptedPassword: bcrypt.hashSync(password, 10),
@@ -53,9 +53,9 @@ describe("UPDATE PRODUCT", () => {
         images: ["gak ada"],
       })
       .then((res) => {
-        product = res.body
+        product = res.body;
         console.log(product);
-      })
+      });
   });
 
   it("Update Product, not have any problem, response should be 201", async () => {    

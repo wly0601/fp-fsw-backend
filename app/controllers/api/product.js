@@ -217,7 +217,7 @@ module.exports = {
             buyerId,
             accBySeller: null
           }
-        })
+        });
 
         if(!isMarked) {
           markedByUser = false;

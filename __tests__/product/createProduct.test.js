@@ -64,11 +64,11 @@ describe("CREATE PRODUCT", () => {
       .then((res) => {
         expect(res.statusCode).toBe(400);
         expect(res.body).toEqual(
-          expect.objectContaining({
-          	error: {
-            	name: expect.any(String),
-            	message: expect.any(String)
-          	}
+        expect.objectContaining({
+          error: {
+            name: expect.any(String),
+            message: expect.any(String)
+          }
           })
         );
       });

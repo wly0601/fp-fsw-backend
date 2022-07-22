@@ -14,7 +14,7 @@ describe("CREATE / DELETE WISHLIST", () => {
         },
         buyerId: 1,
       }
-    })
+    });
 
     await request(app)
       .post('/api/login')
@@ -36,7 +36,7 @@ describe("CREATE / DELETE WISHLIST", () => {
         },
         buyerId: 1,
       }
-    })
+    });
   });
 
   it("Should create Wishlist, but wishing the own product", () => {    
@@ -56,7 +56,7 @@ describe("CREATE / DELETE WISHLIST", () => {
             message: expect.any(String),
           })
         );
-      })
+      });
   });
 
   it("Should create Wishlist, not have any problem", () => {    
@@ -76,7 +76,7 @@ describe("CREATE / DELETE WISHLIST", () => {
             message: expect.any(String),
           })
         );
-      })
+      });
   });
 
   it("Should create Wishlist, but already marked", () => {    
@@ -96,7 +96,7 @@ describe("CREATE / DELETE WISHLIST", () => {
             message: expect.any(String),
           })
         );
-      })
+      });
   });
 
   it("Should delete wishlist", () => {     
@@ -116,7 +116,7 @@ describe("CREATE / DELETE WISHLIST", () => {
             message: expect.any(String),
           })
         );
-      })
+      });
   });
 
   it("Should delete wishlist that not even existed", () => {     
@@ -136,7 +136,7 @@ describe("CREATE / DELETE WISHLIST", () => {
             message: expect.any(String),
           })
         );
-      })
+      });
   });
 
   it("Should response 400", () => {     
@@ -158,6 +158,6 @@ describe("CREATE / DELETE WISHLIST", () => {
             }
           })
         );
-      })
+      });
   });
 });
