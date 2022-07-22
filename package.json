@@ -12,7 +12,10 @@
     "test:root": "jest ./__tests__/rootUrl.test.js",
     "test:auth": "jest ./__tests__/auth",
     "test:product": "jest ./__tests__/product",
+    "test:upload": "jest ./__tests__/upload",
     "test:wishlist": "jest ./__tests__/wishlist",
+    "test:transaction": "jest ./__tests__/transaction",
+    "test:notification": "jest ./__tests__/notification",
     "test:category": "jest ./__tests__/category",
     "test:city": "jest ./__tests__/city"
   },
@@ -36,6 +39,7 @@
   "devDependencies": {
     "eslint": "^8.20.0",
     "jest": "^28.1.3",
+    "mz": "^2.7.0",
     "nodemon": "^2.0.16",
     "supertest": "^6.2.4"
   }

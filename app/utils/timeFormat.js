@@ -1,7 +1,7 @@
 function timeFormat(date) {
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   if (date.getMinutes() < 10) {
-    var minutes = '0' + date.getMinutes().toString();
+    var minutes = `0${date.getMinutes()}`;
   } else {
     minutes = date.getMinutes();
   }

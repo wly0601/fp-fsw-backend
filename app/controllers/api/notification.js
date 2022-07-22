@@ -71,7 +71,6 @@ module.exports = {
         var show;
         if (result.information === "Product of this user.") {
           show = result.product;
-
           return ({
             msg: "Berhasil Diterbitkan",
             productId: show.id,
@@ -136,6 +135,7 @@ module.exports = {
         data: sortedMsg
       });
     } catch (err) {
+      console.log(err);
       res.status(400).json({
         status: "FAIL",
         message: err.message

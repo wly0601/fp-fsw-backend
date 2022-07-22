@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../app");
-const { Users, Products } = require('../../app/models');
+const { Users, Products, TransactionHistory } = require('../../app/models');
 const bcrypt = require("bcryptjs");
 
 var token, user, product;
@@ -85,9 +85,16 @@ describe("GET PRODUCT", () => {
       });
   });
 
-  it("Get Product, with bookmark", async () => {    
+  it("Get Product, with bookmark & disable button", async () => {
+    await TransactionHistory.create({
+      productId: 1,
+      bargainPrice: 1000,
+      buyerId: 5,
+      dateOfBargain: new Date(),
+    });
+
     return request(app)
-      .get(`/api/product/1?buyerId=3`)
+      .get(`/api/product/1?buyerId=5`)
       .set("Content-Type", "application/json")
       .then((res) => {
         expect(res.statusCode).toBe(200);

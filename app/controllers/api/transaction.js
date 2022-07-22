@@ -12,8 +12,19 @@ module.exports = {
         productId
       } = req.body;
 
+      if(!bargainPrice || !productId) {
+        throw new Error("Cannot be Empty!");
+      }
+
       const dateOfBargain = new Date();
       const product = await productServices.get(productId);
+      const getTransactionId = await transactionServices.getOne({
+        where: {
+          productId,
+          buyerId: req.user.id,
+          accBySeller: null
+        }
+      })
 
       if (req.user.id === product.sellerId) {
         res.status(401).json({
@@ -23,12 +34,20 @@ module.exports = {
         return;
       }
 
-      if (product.seller.accBySeller === null) {
+      if (!!getTransactionId) {
         res.status(409).json({
           status: "Conflict",
           message: "Cannot bargain again!"
         });
         return;      
+      }
+
+      if (bargainPrice > product.price) {
+        res.status(400).json({
+          status: "FAIL",
+          message: "Invalid Bargain Price!"
+        });
+        return;  
       }
 
       const transaction = await transactionServices.create({
@@ -38,7 +57,7 @@ module.exports = {
         dateOfBargain,
       });
 
-      await productServices.update(productId, {
+      const update = await productServices.update(productId, {
         statusId: 2,
         numberOfWishlist: product.numberOfWishlist + 1,
       });

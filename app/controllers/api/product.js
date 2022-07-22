@@ -1,4 +1,5 @@
 const productServices = require("../../services/product");
+const transactionServices = require("../../services/transaction");
 const userServices = require("../../services/users");
 const wishServices = require("../../services/wishlist");
 const application = require("./application.js");
@@ -202,6 +203,7 @@ module.exports = {
       var markedByUser = false;
       if(!!buyerId) {
         markedByUser = true;
+        var disableButton = false;
         const isMarked = await wishServices.getOne({
           where: {
             buyerId,
@@ -209,8 +211,20 @@ module.exports = {
           }
         });
 
+        const isBargained = await transactionServices.getOne({
+          where: {
+            productId: product.id,
+            buyerId,
+            accBySeller: null
+          }
+        })
+
         if(!isMarked) {
           markedByUser = false;
+        }
+
+        if(!!isBargained) {
+          disableButton = true;
         }
       }
 
@@ -227,6 +241,7 @@ module.exports = {
         category: product.category,
         seller: product.seller,
         markedByUser,
+        disableButton,
       });
     } catch (err) {
       res.status(400).json({
