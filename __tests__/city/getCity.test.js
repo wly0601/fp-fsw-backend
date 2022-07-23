@@ -41,6 +41,22 @@ describe('GET CITY (All & By ID)', () => {
       });
   });
 
+  it('Get city, should response with status code 200', async () => {
+    const cityCount = await Cities.count();
+    return request(app)
+      .get(`/api/city/${cityCount}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual(
+          expect.objectContaining({
+            ...res.body,
+          })
+        );   
+      });
+  });
+
   it('Get All city, Should response with status code 404', async () => {
     const cityCount = await Cities.count();
     return request(app)
