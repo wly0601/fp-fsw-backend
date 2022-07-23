@@ -201,9 +201,9 @@ module.exports = {
       }
 
       var markedByUser = false;
+      var disableButton = false;
       if(!!buyerId) {
         markedByUser = true;
-        var disableButton = false;
         const isMarked = await wishServices.getOne({
           where: {
             buyerId,
