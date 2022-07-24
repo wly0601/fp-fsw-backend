@@ -1,4 +1,5 @@
 const productServices = require("../../services/product");
+const transactionServices = require("../../services/transaction");
 const userServices = require("../../services/users");
 const wishServices = require("../../services/wishlist");
 const application = require("./application.js");
@@ -24,7 +25,7 @@ module.exports = {
       if (typeof price !== 'number') {
         res.status(400).json({
           status: "FAIL",
-          message: "Price must be float!"
+          message: `Price must be a string`,
         });
         return;
       }
@@ -42,7 +43,7 @@ module.exports = {
 
       res.status(201).json(product);
     } catch (err) {
-      res.status(422).json({
+      res.status(400).json({
         error: {
           name: err.name,
           message: err.message,
@@ -86,15 +87,7 @@ module.exports = {
         return;
       }
 
-      if (typeof price !== 'number') {
-        res.status(400).json({
-          status: "FAIL",
-          message: "Price must be float!"
-        });
-        return;
-      }
-
-      await productServices.update(req.params.id, {
+      const update = await productServices.update(req.params.id, {
         name,
         sellerId: req.user.id,
         price,
@@ -121,8 +114,8 @@ module.exports = {
     try {
       const {
         filterByStatusId = 1,
-          page = 1,
-          pageSize = 10
+        page = 1,
+        pageSize = 10
       } = req.query;
 
       const seller = await userServices.getOne({
@@ -186,7 +179,8 @@ module.exports = {
         where: {
           id: req.params.id
         },
-        include: [{
+        include: [
+          {
             model: Users,
             as: "seller",
             attributes: {
@@ -215,6 +209,7 @@ module.exports = {
       }
 
       var markedByUser = false;
+      var disableButton = false;
       if(!!buyerId) {
         markedByUser = true;
         const isMarked = await wishServices.getOne({
@@ -224,8 +219,20 @@ module.exports = {
           }
         });
 
+        const isBargained = await transactionServices.getOne({
+          where: {
+            productId: product.id,
+            buyerId,
+            accBySeller: null
+          }
+        });
+
         if(!isMarked) {
           markedByUser = false;
+        }
+
+        if(!!isBargained) {
+          disableButton = true;
         }
       }
 
@@ -242,6 +249,7 @@ module.exports = {
         category: product.category,
         seller: product.seller,
         markedByUser,
+        disableButton,
       });
     } catch (err) {
       res.status(400).json({

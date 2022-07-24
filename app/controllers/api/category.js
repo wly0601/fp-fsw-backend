@@ -6,16 +6,12 @@ module.exports = {
       const category = await categoryServices.get(req.params.id);
 
       if (!category) {
-        res.status(404).json({
-          status: "FAIL",
-          message: `Category with id ${req.params.id} not found!`,
-        });
-        return;
+        throw new Error(`Category with id ${req.params.id} not found!`);
       }
 
       res.status(200).json(category);
     } catch (err) {
-      res.status(400).json({
+      res.status(404).json({
         error: {
           name: err.name,
           message: err.message,
@@ -25,18 +21,11 @@ module.exports = {
   },
 
   async getAllCategories(req, res) {
-    try {
-      const getAll = await categoryServices.list();
+    const getAll = await categoryServices.list();
 
-      res.status(200).json({
-        status: "success",
-        data: getAll
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: "FAIL",
-        message: err.message
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: getAll
+    });
   }
 };

@@ -113,7 +113,7 @@ apiRouter.get("/api/user/buyer/history-as-buyer",
  * @Notification Resources
  */
 
-apiRouter.get("/api/user/:id/notifications",
+apiRouter.get("/api/notifications",
   middlewares.authorization.authorize,
   controllers.api.notification.getAllNotificationUser,
 );
@@ -181,5 +181,7 @@ apiRouter.get("/api/wishlist",
 
 apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
 apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+apiRouter.use(controllers.api.application.handleNotFound);
 
 module.exports = apiRouter;

@@ -79,7 +79,7 @@ module.exports = {
         updatedAt: user.updatedAt,
       });
     } catch (err) {
-      res.status(401).json({
+      res.status(400).json({
         status: "Failed",
         message: err.message
       });
@@ -95,6 +95,7 @@ module.exports = {
         address,
         cityId
       } = req.body;
+
       const id = req.params.id;
       const compareId = id.toString() === req.user.id.toString();
       if (!compareId) {
@@ -104,13 +105,15 @@ module.exports = {
         });
         return;
       }
-      userServices.update(req.params.id, {
+
+      const update = await userServices.update(req.params.id, {
         name,
         photo,
         phoneNumber,
         address,
         cityId,
       });
+
       res.status(200).json({
         status: "OK",
         message: `User with id ${req.params.id} has been updated.`,
@@ -125,14 +128,7 @@ module.exports = {
   },
 
   async whoAmI(req, res) {
-    try {
-      res.status(200).json(req.user);
-    } catch (err) {
-      res.status(401).json({
-        status: "FAIL",
-        message: err.message,
-      });
-    }
+    res.status(200).json(req.user);
   },
 
   async getUser(req, res) {
@@ -152,16 +148,12 @@ module.exports = {
       });
 
       if (!user) {
-        res.status(404).json({
-          status: "FAIL",
-          message: `User with id ${req.params.id} not found!`,
-        });
-        return;
+        throw new Error(`User with id ${req.params.id} not found!`);
       }
 
       res.status(200).json(user);
     } catch (err) {
-      res.status(401).json({
+      res.status(404).json({
         status: "FAIL",
         message: err.message,
       });
@@ -169,22 +161,15 @@ module.exports = {
   },
 
   async getAllUsers(req, res) {
-    try {
-      const getAll = await userServices.list({
-        attributes: {
-          exclude: ["encryptedPassword"]
-        }
-      });
+    const getAll = await userServices.listByCondition({
+      attributes: {
+        exclude: ["encryptedPassword"]
+      }
+    });
 
-      res.status(200).json({
-        status: "success",
-        data: getAll
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: "FAIL",
-        message: err.message
-      });
-    }
+    res.status(200).json({
+      status: "success",
+      data: getAll
+    });
   },
 };

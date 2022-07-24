@@ -14,6 +14,17 @@ module.exports = {
     });
   },
 
+  handleNotFound(req, res) {
+    const err = new Error("Root Not Found!");
+    res.status(404).json({
+      error: {
+        name: err.name,
+        message: err.message,
+        details: err.details,
+      }
+    });
+  },
+
   getOffset(req, count) {
     const { page = 1, pageSize = 16 } = req.query;
     const offset = (page - 1) * pageSize;

@@ -1,26 +1,21 @@
 const categoryRepository = require("../repositories/categories");
 
 module.exports = {
-	async list() {
-		// eslint-disable-next-line no-useless-catch
-		try {
-			const categories = await categoryRepository.findAll();
-			const categoriesCount = await categoryRepository.getTotalCategories();
+  async list() {
+    const categories = await categoryRepository.findAll();
+    const categoriesCount = await categoryRepository.getTotalCategories();
 
-			return {
-				data: categories,
-				count: categoriesCount,
-			};
-		} catch (err) {
-			throw err;
-		}
-	},
+    return {
+      data: categories,
+      count: categoriesCount,
+    };
+  },
 
-	get(id) {
-		return categoryRepository.find(id);
-	},
+  get(id) {
+    return categoryRepository.find(id);
+  },
 
-	getOne(key) {
-		return categoryRepository.findOne(key);
-	},
+  getOne(key) {
+    return categoryRepository.findOne(key);
+  },
 };
