@@ -15,7 +15,7 @@ npm install
 After that, create `.env` file whose contents are the same as [`.env-example`](.env-example), but fill it with your own. For instance,
 
 ```sh
-JWT_SIGNATURE_KEY = araara
+JWT_PRIVATE_KEY = araara
 DB_USER = postgres
 DB_PASSWORD = 12345
 DB_NAME = MyDatabase
@@ -26,7 +26,7 @@ CLOUD_NAME =
 API_KEY =
 API_SECRET =
 ```
-Where CLOUD_NAME, API_KEY, and API_SECRET are environment from [`cloudinary`](http://cloudinary.com) for Media Handling. To run the server, run the script `dev` inside [`package.json`](.package.json) file with : 
+Where CLOUD_NAME, API_KEY, and API_SECRET are environment from [`cloudinary`](http://cloudinary.com) for Media Handling. To run the server, just run the script `dev` inside [`package.json`](package.json) file with : 
 
 ```sh
 npm run dev
@@ -34,4 +34,5 @@ npm run dev
 
 # Application Deployment URL and Open API Documentation
 Deployment : [`Second Hand Back End Application`](https://second-hand-be.herokuapp.com/)
+
 Documentation : [`Open API Documentation`](https://second-hand-be.herokuapp.com/documentation)
