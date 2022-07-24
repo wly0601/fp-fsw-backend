@@ -21,13 +21,6 @@ describe("CREATE TRANSACTION", () => {
       .then((res) => {
         token = res.body.token;
       });
-
-    await TransactionHistory.create({
-      productId: 3,
-      bargainPrice: 1000,
-      buyerId: 1,
-      dateOfBargain: new Date(),
-    });
   });
 
   it("Create Transaction", async () => {    
@@ -37,7 +30,7 @@ describe("CREATE TRANSACTION", () => {
       .set("Content-Type", "application/json")
       .set('Authorization', `Bearer ${token}`)
       .send({ 
-        productId: 2,
+        productId: 4,
         bargainPrice: 1000,
       })
       .then((res) => {
@@ -51,6 +44,12 @@ describe("CREATE TRANSACTION", () => {
   });
 
   it("Create Transaction, but already had it before", async () => {
+    await TransactionHistory.create({
+      productId: 3,
+      bargainPrice: 1000,
+      buyerId: 1,
+      dateOfBargain: new Date(),
+    });
     return request(app)
       .post("/api/transaction")
       .set("Content-Type", "application/json")
@@ -90,7 +89,7 @@ describe("CREATE TRANSACTION", () => {
       });
   });
 
-  it("Create Transaction, but bargain is greater than origial price", async () => {
+  it("Create Transaction, but bargain is greater than original price", async () => {
     return request(app)
       .post("/api/transaction")
       .set("Content-Type", "application/json")

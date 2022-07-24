@@ -22,6 +22,14 @@ module.exports = {
         images
       } = req.body;
 
+      if (typeof price !== 'number') {
+        res.status(400).json({
+          status: "FAIL",
+          message: `Price must be a string`,
+        });
+        return;
+      }
+
       const product = await productServices.create({
         name,
         sellerId: req.user.id,

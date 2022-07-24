@@ -73,4 +73,26 @@ describe("CREATE PRODUCT", () => {
         );
       });
   });
+
+  it("Create Product, but price is not number", async () => {
+    return request(app)
+      .post("/api/products")
+      .set("Content-Type", "application/json")
+      .set('Authorization', `Bearer ${token}`)
+      .send({ 
+        name: "Kacamata Pantai",
+        price: "150000",
+        categoryId: 12,
+        description: "Enak buat di pantai",
+        images: ["https://source.unsplash.com/500x500"]
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual(
+        expect.objectContaining({
+            ...res.body,
+          })
+        );
+      });
+  });
 });

@@ -34,6 +34,8 @@ module.exports = {
         return;
       }
 
+      console.log(getTransactionId);
+
       if (!!getTransactionId) {
         res.status(409).json({
           status: "Conflict",
