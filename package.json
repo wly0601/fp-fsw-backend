@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node bin/www",
-    "dev": "nodemon -q bin/www",
+    "start": "node index.js",
+    "dev": "nodemon -q index.js",
     "eslint": "eslint ./**/*.js",
     "eslint:fix": "eslint --fix ./**/*.js",
     "test": "jest",

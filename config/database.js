@@ -1,3 +1,5 @@
+const pg = require('pg')
+
 module.exports = {
   development: {
     username: process.env.DB_USER,
@@ -20,6 +22,7 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "postgres",
+    dialectModule: pg,
     dialectOptions: {
       ssl: {
         require: true,
