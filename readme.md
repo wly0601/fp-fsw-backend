@@ -32,7 +32,7 @@ Where CLOUD_NAME, API_KEY, and API_SECRET are environment from [`cloudinary`](ht
 npm run dev
 ```
 
-# Application Deployment URL and Open API Documentation
-Deployment : [`Second Hand Back End Application`](https://second-hand-be.herokuapp.com/)
-
-Documentation : [`Open API Documentation`](https://second-hand-be.herokuapp.com/documentation)
+# Bookmarks
+[`Application Deployment URL`](https://second-hand-be.herokuapp.com/)
+[`Open API Documentation`](https://second-hand-be.herokuapp.com/documentation)
+[`Entity Relationship Diagram (ERD)`](https://dbdiagram.io/d/62a8b0579921fe2a960493c5)
