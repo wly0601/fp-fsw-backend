@@ -178,9 +178,17 @@ apiRouter.get("/api/wishlist",
 /**
  * @API Documentation
  */
+  const options = {
+    customCssUrl:
+    'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js',
+      ],
+  };
 
 apiRouter.get('/documentation.json', (req, res) => res.send(swaggerDocument));
-apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+apiRouter.use('/documentation', swaggerUI.serve, swaggerUI.setup(swaggerDocument, options));
 
 apiRouter.use(controllers.api.application.handleNotFound);
 
